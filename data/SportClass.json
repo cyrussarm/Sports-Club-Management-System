@@ -1,0 +1,13 @@
+[
+    {
+        "title": "kelas-shahid-khodadad",
+        "sport_type": "Bodybuilding",
+        "coach_username": "Parvin",
+        "hall_name": "salon-02",
+        "day":"Monday",
+        "time": "6-8 PM",
+        "capacity": 12,
+        "enrolled": ["reza_3451&"],
+        "is_active": true
+    }
+]

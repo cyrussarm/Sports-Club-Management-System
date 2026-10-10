@@ -1,0 +1,9 @@
+[
+    {
+        "name": "salon-01",
+        "capacity": 20, 
+        "equipments": ["Treadmill", "dumbbells", "bicycle"],
+        "is_active": true
+    }
+
+]
