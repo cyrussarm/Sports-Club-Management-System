@@ -21,6 +21,14 @@ class User:
             "email": self.email,
             "is_active": self.is_active
         }
+class Coach(User):
+    def show_info(self):
+        return "[Coach] " + super().show_info()
+
+class Member(User):
+    def show_info(self):
+        return "[Member] " + super().show_info()
+
 import json 
 admin = {"username": "admin", "password": "admin123"}
 def save_users():
@@ -29,8 +37,15 @@ def save_users():
 def load_users():
     try:
         with open("user_data.json", "r", encoding="utf-8") as file:
-            return [User(**u) for u in json.load(file)]
-    except FileNotFoundError:
+            data = json.load(file)
+            users = []
+            for u in data:
+                if u["role"] == "coach":
+                    users.append(Coach(**u))
+                else:
+                    users.append(Member(**u))
+            return users
+    except FileNotFoundError:   
         return []
     except json.JSONDecodeError:
         return []
@@ -49,7 +64,10 @@ def admin_panel():
                 username = input("Enter username: ").strip()
                 password = input("Enter password: ").strip()
                 email = input("Enter email: ").strip() 
-                new_user = User(name, role, username, password, email)
+                if role == "coach":
+                    new_user = Coach(name, role, username, password, email)
+                else:
+                    new_user = Member(name, role, username, password, email)
                 user.append(new_user)
                 save_users()
                 print(f"{role.capitalize()} added successfully!")
