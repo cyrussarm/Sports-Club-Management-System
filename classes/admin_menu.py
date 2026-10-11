@@ -58,7 +58,6 @@ def show_reports():
     print(f"Active classes: {active_classes}")
     print(f"Total revenue: {total_revenue}")
 
-    # --- advanced: revenue per subscription type ---
     revenue_by_type = {}
     for s in subscriptions:
         sub_type = s["subscription_type"]
@@ -72,7 +71,6 @@ def show_reports():
     for sub_type, amount in revenue_by_type.items():
         print(f"{sub_type}: {amount}")
 
-    # --- advanced: most popular class ---
     print("----- Most popular class -----")
     best_class = None
     for c in classes:
@@ -382,7 +380,6 @@ def admin_panel(admin):
                 print(f"Capacity cannot be less than enrolled members ({len(cls.enrolled)}).")
                 continue
 
-            # all checks passed, now apply the changes
             cls.hall_name = hall.name
             if new_coach:
                 cls.coach_username = new_coach
