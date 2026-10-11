@@ -15,11 +15,11 @@ def save_class(classes):
         class_data.append(c.to_dict())
     save_data("SportClass.json", class_data)
 def load_hall():
-          data = load_data("salon.json")
-          halls = []
-          for d in data:
-            halls.append(Salon.from_dict(d))
-            return halls
+    data = load_data("salon.json")
+    halls = []
+    for d in data:
+        halls.append(Salon.from_dict(d))
+    return halls
 def save_files(halls):
     halls_data=[]
     for d in halls:
@@ -199,7 +199,7 @@ def admin_panel(admin):
                         found=True
                 if found:
                     print("hall already exist")
-                    continueلهف
+                    continue
             except ValueError:
                 print("capacity must be number")
                 continue
