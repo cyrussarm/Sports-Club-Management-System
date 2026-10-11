@@ -23,7 +23,8 @@ def admin_panel(admin):
             "4-edit user\n"
             "5-add hall\n"
             "6-view hall\n"
-            "7-log out\n"
+            "7-activate/deactivate hall\n"
+            "8-log out\n"
         )
         if choice == "1":
             role = input("Enter user type (coach/member): ").strip().lower()
@@ -136,7 +137,23 @@ def admin_panel(admin):
                 else:
                     status = "inactive"
                 print(f"{h.name} | capacity: {h.capacity} | {equipments} | {status}")
-        elif choice == "7":
+        elif choice =="7":
+            name = input("Enter hall name  to activate/deactivate: ").strip()
+            try:
+                all_halls = load_hall()
+                found = False
+                for h in all_halls:
+                    if h.name == name:
+                        found = True
+                        h.is_active = not h.is_active
+                        save_files(all_halls)
+                        print(f"User {h.name} is now {'active' if h.is_active else 'inactive'}.")
+                        break
+                if not found:
+                    print("hall not found.")
+            except ClubError as e:
+                print("Error:", e)
+        elif choice == "8":
             return
         else:
             print("invalid choice")
