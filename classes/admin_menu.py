@@ -34,7 +34,6 @@ def show_reports():
     classes = load_class()
     subscriptions = load_subscriptions()
 
-    # --- basic reports ---
     active_members = 0
     active_coaches = 0
     for u in users:
