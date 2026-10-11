@@ -1,6 +1,19 @@
 from Repositories.users_repository import UserRepository
 from core.exceptions import ClubError
 from services.add_user import add_user
+from core.storage import load_data, save_data
+from core.models import Salon
+def load_hall():
+          data = load_data("salon.json")
+          halls = []
+          for d in data:
+            halls.append(Salon.from_dict(d))
+          return halls
+def save_files(halls):
+    halls_data=[]
+    for d in halls:
+        halls_data.append(d.to_dict())
+    save_data("salon.json", halls_data)
 def admin_panel(admin):
     while True:
         choice = input(
@@ -8,7 +21,9 @@ def admin_panel(admin):
             "2-view user\n"
             "3-activate/deactivate user\n"
             "4-edit user\n"
-            "5-log out\n"
+            "5-add hall\n"
+            "6-view hall\n"
+            "7-log out\n"
         )
         if choice == "1":
             role = input("Enter user type (coach/member): ").strip().lower()
@@ -80,10 +95,25 @@ def admin_panel(admin):
                     print("user not found")
             except ClubError as e :
                 print("Error:", e)
-        elif choice == "5":
+        elif choice == "6":
+            try:
+                halls = load_hall()
+            except ClubError as e:
+                print("Error:", e)
+                continue
+            if not halls:
+                print("No halls found.")
+            for h in halls:
+                equipments=", ".join(h.equipments)
+                if h.is_active:
+                    status = "active"
+                else:
+                    status = "inactive"
+                print(f"{h.name} | capacity: {h.capacity} | {equipments} | {status}")
+        elif choice == "7":
             return
         else:
-            print("Invalid choice.")
+            print("invalid choice")
 def admin_login():
     username = input("Enter admin username: ").strip()
     password = input("Enter admin password: ").strip()
