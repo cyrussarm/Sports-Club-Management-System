@@ -95,6 +95,32 @@ def admin_panel(admin):
                     print("user not found")
             except ClubError as e :
                 print("Error:", e)
+        elif choice =="5":
+            name=input("hall name").strip() 
+            try:
+                capacity=int(input("enter capacity : "))
+                if capacity<=0:
+                    print("capacity must more than 0 ")
+                    continue
+                halls=load_hall()
+                found=False
+                for h in halls :
+                    if h.name==name:
+                        found=True
+                if found:
+                    print("hall already exist")
+                    continueلهف
+            except ValueError:
+                print("capacity must be number")
+                continue
+
+            text = input("Equipments (comma separated): ")
+            equipments = [e.strip() for e in text.split(",")]
+            new_hall=Salon.from_dict({"name": name, "capacity": capacity,"equipments": equipments, "is_active": True})
+            halls.append(new_hall)
+            save_files(halls)
+            print("Hall added.")                         
+
         elif choice == "6":
             try:
                 halls = load_hall()
