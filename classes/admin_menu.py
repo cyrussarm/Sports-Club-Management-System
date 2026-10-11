@@ -1,5 +1,7 @@
 from Repositories.users_repository import UserRepository
 from core.exceptions import ClubError
+from services.add_user import add_user
+from services.add_user import add_user
 import json 
 class User:
     def __init__(self, name, role , username, password, email , is_active=True):
@@ -51,7 +53,7 @@ def load_users():
     except json.JSONDecodeError:
         return []
 user = load_users()
-def admin_panel():
+def admin_panel(admin):
     while True:
         choice = input(
             "1-add user\n"
@@ -65,13 +67,10 @@ def admin_panel():
                 username = input("Enter username: ").strip()
                 password = input("Enter password: ").strip()
                 email = input("Enter email: ").strip() 
-                if role == "coach":
-                    new_user = Coach(name, role, username, password, email)
-                else:
-                    new_user = Member(name, role, username, password, email)
-                user.append(new_user)
-                save_users()
-                print(f"{role.capitalize()} added successfully!")
+                try:
+                    add_user(admin.to_dict(), name, username, password, email, role)
+                except ClubError as e:
+                    print("Error:", e)
             else:
                 print("Invalid user type. Please enter 'coach' or 'member'.")
         elif choice == "2":
@@ -111,8 +110,9 @@ while True:
         "Select: "
     )
     if choice == "1":
-        if admin_login():
-            admin_panel()
+        admin = admin_login()
+        if admin:
+            admin_panel(admin)
         else:
             print("Invalid admin credentials.")
     elif choice == "2":
