@@ -99,6 +99,31 @@ def export_people_txt():
     print("people.txt created.")
 
 
+def find_active_hall(hall_name):
+    for h in load_hall():
+        if h.name == hall_name:
+            if not h.is_active:
+                print("Hall is not active.")
+                return None
+            return h
+    print("Hall not found.")
+    return None
+
+
+def find_active_coach(username):
+    for u in UserRepository.allusers():
+        if u.username == username:
+            if u.role != "coach":
+                print("This user is not a coach.")
+                return None
+            if not u.is_active:
+                print("Coach is not active.")
+                return None
+            return u
+    print("Coach not found.")
+    return None
+
+
 def admin_panel(admin):
     while True:
         choice = input(
@@ -111,9 +136,11 @@ def admin_panel(admin):
             "7-activate/deactivate hall\n"
             "8-view classes\n"
             "9-add class\n"
-            "10-reports\n"
-            "11-export people to txt\n"
-            "12-log out\n"
+            "10-edit class\n"
+            "11-activate/deactivate class\n"
+            "12-reports\n"
+            "13-export people to txt\n"
+            "14-log out\n"
         )
         if choice == "1":
             role = input("Enter user type (coach/member): ").strip().lower()
@@ -186,7 +213,10 @@ def admin_panel(admin):
             except ClubError as e :
                 print("Error:", e)
         elif choice =="5":
-            name=input("hall name").strip() 
+            name = input("Hall name: ").strip()
+            if not name:
+                print("Hall name cannot be empty.")
+                continue
             try:
                 capacity=int(input("enter capacity : "))
                 if capacity<=0:
@@ -242,39 +272,43 @@ def admin_panel(admin):
                     print("hall not found.")
             except ClubError as e:
                 print("Error:", e)
-        elif choice=="8": 
-                classes=load_class()
-                for c in classes:
-                    print(f"{c.title} | {c.sport_type} | {c.coach_username} | {c.hall_name} | {c.day} | {c.time} | {len(c.enrolled)}/{c.capacity} | {c.is_active}")
+        elif choice == "8":
+            try:
+                classes = load_class()
+            except ClubError as e:
+                print("Error:", e)
+                continue
+            if not classes:
+                print("No classes found.")
+            for c in classes:
+                if c.is_active:
+                    status = "active"
+                else:
+                    status = "inactive"
+                print(f"{c.title} | {c.sport_type} | coach: {c.coach_username} | hall: {c.hall_name} | {c.day} {c.time} | {len(c.enrolled)}/{c.capacity} | {status}")
         elif choice == "9":
             hall_name = input("Hall name: ").strip()
-            hall = None
-            for h in load_hall():
-                if h.name == hall_name:
-                    hall = h
+            hall = find_active_hall(hall_name)
             if hall is None:
-                print("Hall not found.")
-                continue
-            if not hall.is_active:
-                print("Hall is not active.")
                 continue
 
             coach_username = input("Coach username: ").strip()
-            coach = None
-            for u in UserRepository.allusers():
-                if u.username == coach_username:
-                    coach = u
+            coach = find_active_coach(coach_username)
             if coach is None:
-                print("Coach not found.")
-                continue
-            if coach.role != "coach":
-                print("This user is not a coach.")
-                continue
-            if not coach.is_active:
-                print("Coach is not active.")
                 continue
 
             title = input("Class title: ").strip()
+            if not title:
+                print("Class title cannot be empty.")
+                continue
+            classes = load_class()
+            found = False
+            for c in classes:
+                if c.title == title:
+                    found = True
+            if found:
+                print("Class already exists.")
+                continue
             sport_type = input("Sport type: ").strip()
             day = input("Day: ").strip()
             time = input("Time: ").strip()
@@ -296,21 +330,96 @@ def admin_panel(admin):
                 "coach_username": coach_username, "hall_name": hall_name,
                 "day": day, "time": time, "capacity": capacity,
                 "enrolled": [], "is_active": True})
-            classes = load_class()
             classes.append(new_class)
             save_class(classes)
             print("Class added.")
         elif choice == "10":
+            title = input("Class title to edit: ").strip()
+            classes = load_class()
+            cls = None
+            for c in classes:
+                if c.title == title:
+                    cls = c
+            if cls is None:
+                print("Class not found.")
+                continue
+            print("Press Enter to keep the current value.")
+
+            new_hall_name = input(f"New hall ({cls.hall_name}): ").strip()
+            if new_hall_name:
+                hall = find_active_hall(new_hall_name)
+                if hall is None:
+                    continue
+            else:
+                hall = find_active_hall(cls.hall_name)
+                if hall is None:
+                    print("Current hall is not usable, choose another hall.")
+                    continue
+
+            new_coach = input(f"New coach ({cls.coach_username}): ").strip()
+            if new_coach:
+                if find_active_coach(new_coach) is None:
+                    continue
+
+            new_day = input(f"New day ({cls.day}): ").strip()
+            new_time = input(f"New time ({cls.time}): ").strip()
+
+            new_capacity = cls.capacity
+            text = input(f"New capacity ({cls.capacity}): ").strip()
+            if text:
+                try:
+                    new_capacity = int(text)
+                except ValueError:
+                    print("Capacity must be a number.")
+                    continue
+            if new_capacity <= 0:
+                print("Capacity must be greater than zero.")
+                continue
+            if new_capacity > hall.capacity:
+                print(f"Capacity cannot be more than hall capacity ({hall.capacity}).")
+                continue
+            if new_capacity < len(cls.enrolled):
+                print(f"Capacity cannot be less than enrolled members ({len(cls.enrolled)}).")
+                continue
+
+            # all checks passed, now apply the changes
+            cls.hall_name = hall.name
+            if new_coach:
+                cls.coach_username = new_coach
+            if new_day:
+                cls.day = new_day
+            if new_time:
+                cls.time = new_time
+            cls.capacity = new_capacity
+            save_class(classes)
+            print("Class updated.")
+        elif choice == "11":
+            title = input("Class title: ").strip()
+            classes = load_class()
+            found = False
+            for c in classes:
+                if c.title == title:
+                    found = True
+                    c.is_active = not c.is_active
+                    save_class(classes)
+                    if c.is_active:
+                        print(f"Class {c.title} is now active.")
+                    else:
+                        print(f"Class {c.title} is now inactive.")
+                    break
+            if not found:
+                print("Class not found.")
+        elif choice == "12":
             try:
                 show_reports()
             except ClubError as e:
                 print("Error:", e)
-        elif choice == "11":
+        elif choice == "13":
             try:
                 export_people_txt()
             except ClubError as e:
                 print("Error:", e)
-        elif choice == "12":
+        elif choice == "14":
             return
         else:
             print("invalid choice")
@@ -332,30 +441,35 @@ def admin_login():
     if choice == "y":
         return admin_login()
     return None
-while True:
-    choice = input(
-        "1-admin login\n"
-        "2-coach login\n"
-        "3-member login\n"
-        "4-exit\n"
-        "Select: "
-    )
-    if choice == "1":
-        admin = admin_login()
-        if admin:
-            admin_panel(admin)
+def main():
+    while True:
+        choice = input(
+            "1-admin login\n"
+            "2-coach login\n"
+            "3-member login\n"
+            "4-exit\n"
+            "Select: "
+        )
+        if choice == "1":
+            admin = admin_login()
+            if admin:
+                admin_panel(admin)
+            else:
+                print("Invalid admin credentials.")
+        elif choice == "2":
+            coach_username = input("Enter coach username: ").strip()
+            coach_password = input("Enter coach password: ").strip()
+            print("Coach login functionality is not implemented yet.")
+        elif choice == "3":
+            member_username = input("Enter member username: ").strip()
+            member_password = input("Enter member password: ").strip()
+            print("Member login functionality is not implemented yet.")
+        elif choice == "4" :
+            print("Exiting the program.")
+            break
         else:
-            print("Invalid admin credentials.")
-    elif choice == "2":
-        coach_username = input("Enter coach username: ").strip()
-        coach_password = input("Enter coach password: ").strip()
-        print("Coach login functionality is not implemented yet.")
-    elif choice == "3":
-        member_username = input("Enter member username: ").strip()
-        member_password = input("Enter member password: ").strip()
-        print("Member login functionality is not implemented yet.")
-    elif choice == "4" :
-        print("Exiting the program.")
-        break
-    else:
-        print("Invalid choice. Please try again.")
+            print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
