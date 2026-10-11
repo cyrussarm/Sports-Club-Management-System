@@ -1,2 +1,25 @@
-user_data.json
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+data/*.tmp
+*.log
+
+# Local test data (contains passwords)
+user_data.json
