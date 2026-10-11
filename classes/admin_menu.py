@@ -2,13 +2,24 @@ from Repositories.users_repository import UserRepository
 from core.exceptions import ClubError
 from services.add_user import add_user
 from core.storage import load_data, save_data
-from core.models import Salon
+from core.models import Salon,SportClass
+def load_class():
+    data=load_data("SportClass.json")
+    classes = []
+    for c in data :
+        classes.append(SportClass.from_dict(c))    
+    return classes
+def save_class(classes):
+    class_data=[]
+    for c in classes:
+        class_data.append(c.to_dict())
+    save_data("SportClass.json", class_data)
 def load_hall():
           data = load_data("salon.json")
           halls = []
           for d in data:
             halls.append(Salon.from_dict(d))
-          return halls
+            return halls
 def save_files(halls):
     halls_data=[]
     for d in halls:
@@ -24,7 +35,8 @@ def admin_panel(admin):
             "5-add hall\n"
             "6-view hall\n"
             "7-activate/deactivate hall\n"
-            "8-log out\n"
+            "8-view classes\n"
+            "9-log out\n"
         )
         if choice == "1":
             role = input("Enter user type (coach/member): ").strip().lower()
@@ -153,7 +165,11 @@ def admin_panel(admin):
                     print("hall not found.")
             except ClubError as e:
                 print("Error:", e)
-        elif choice == "8":
+        elif choice=="8": 
+                classes=load_class()
+                for c in classes:
+                    print(f"{c.title} | {c.sport_type} | {c.coach_username} | {c.hall_name} | {c.day} | {c.time} | {len(c.enrolled)}/{c.capacity} | {c.is_active}")
+        elif choice == "9":
             return
         else:
             print("invalid choice")
