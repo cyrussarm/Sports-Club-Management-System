@@ -7,7 +7,8 @@ def admin_panel(admin):
             "1-add user\n"
             "2-view user\n"
             "3-activate/deactivate user\n"
-            "4-log out\n"
+            "4-edit user\n"
+            "5-log out\n"
         )
         if choice == "1":
             role = input("Enter user type (coach/member): ").strip().lower()
@@ -56,7 +57,31 @@ def admin_panel(admin):
             except ClubError as e:
                 print("Error:", e)
         elif choice == "4":
-            return 
+            found=False
+            username=input("input your username : ").strip()
+            try:
+                all_users=UserRepository.allusers()
+                for u in all_users:
+                    if u.username==username:
+                        found=True
+                        new_name = input(f"New name ({u.name}): ").strip()
+                        new_email = input(f"New email ({u.email}): ").strip()
+                        if new_name :
+                            u.name = new_name  
+                        if new_email:
+                            if "@" in new_email and "." in new_email:
+                                u.email = new_email
+                            else:
+                                print("email is in invalid format")
+                        UserRepository.save_all(all_users)
+                        print("user update")
+                        break
+                if not found:
+                    print("user not found")
+            except ClubError as e :
+                print("Error:", e)
+        elif choice == "5":
+            return
         else:
             print("Invalid choice.")
 def admin_login():
