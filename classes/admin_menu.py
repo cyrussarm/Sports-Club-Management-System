@@ -36,7 +36,8 @@ def admin_panel(admin):
             "6-view hall\n"
             "7-activate/deactivate hall\n"
             "8-view classes\n"
-            "9-log out\n"
+            "9-add class \n"
+            "10-log out\n"
         )
         if choice == "1":
             role = input("Enter user type (coach/member): ").strip().lower()
@@ -170,6 +171,60 @@ def admin_panel(admin):
                 for c in classes:
                     print(f"{c.title} | {c.sport_type} | {c.coach_username} | {c.hall_name} | {c.day} | {c.time} | {len(c.enrolled)}/{c.capacity} | {c.is_active}")
         elif choice == "9":
+            hall_name = input("Hall name: ").strip()
+            hall = None
+            for h in load_hall():
+                if h.name == hall_name:
+                    hall = h
+            if hall is None:
+                print("Hall not found.")
+                continue
+            if not hall.is_active:
+                print("Hall is not active.")
+                continue
+
+            coach_username = input("Coach username: ").strip()
+            coach = None
+            for u in UserRepository.allusers():
+                if u.username == coach_username:
+                    coach = u
+            if coach is None:
+                print("Coach not found.")
+                continue
+            if coach.role != "coach":
+                print("This user is not a coach.")
+                continue
+            if not coach.is_active:
+                print("Coach is not active.")
+                continue
+
+            title = input("Class title: ").strip()
+            sport_type = input("Sport type: ").strip()
+            day = input("Day: ").strip()
+            time = input("Time: ").strip()
+
+            try:
+                capacity = int(input("Capacity: "))
+            except ValueError:
+                print("Capacity must be a number.")
+                continue
+            if capacity <= 0:
+                print("Capacity must be greater than zero.")
+                continue
+            if capacity > hall.capacity:
+                print(f"Capacity cannot be more than hall capacity ({hall.capacity}).")
+                continue
+
+            new_class = SportClass.from_dict({
+                "title": title, "sport_type": sport_type,
+                "coach_username": coach_username, "hall_name": hall_name,
+                "day": day, "time": time, "capacity": capacity,
+                "enrolled": [], "is_active": True})
+            classes = load_class()
+            classes.append(new_class)
+            save_class(classes)
+            print("Class added.")
+        elif choice == "10":
             return
         else:
             print("invalid choice")
