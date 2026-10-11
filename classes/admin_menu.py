@@ -1,64 +1,13 @@
 from Repositories.users_repository import UserRepository
 from core.exceptions import ClubError
 from services.add_user import add_user
-from services.add_user import add_user
-import json 
-class User:
-    def __init__(self, name, role , username, password, email , is_active=True):
-        self.name = name
-        self.role = role
-        self.username = username
-        self.password = password
-        self.email = email
-        self.is_active = is_active
-    def show_info(self):
-        return f"Name: {self.name}, Role: {self.role}, Username: {self.username}, Email: {self.email}, Active: {self.is_active}"
-    def activate(self):
-        self.is_active = True
-    def deactivate(self):
-        self.is_active = False
-    def to_dict(self):
-        return {
-            "name": self.name,
-            "role": self.role,
-            "username": self.username,
-            "password": self.password,
-            "email": self.email,
-            "is_active": self.is_active
-        }
-class Coach(User):
-    def show_info(self):
-        return "[Coach] " + super().show_info()
-
-class Member(User):
-    def show_info(self):
-        return "[Member] " + super().show_info()
-
-def save_users():
-    with open("user_data.json", "w", encoding="utf-8") as file:
-        json.dump([u.to_dict() for u in user], file, ensure_ascii=False, indent=2)
-def load_users():
-    try:
-        with open("user_data.json", "r", encoding="utf-8") as file:
-            data = json.load(file)
-            users = []
-            for u in data:
-                if u["role"] == "coach":
-                    users.append(Coach(**u))
-                else:
-                    users.append(Member(**u))
-            return users
-    except FileNotFoundError:   
-        return []
-    except json.JSONDecodeError:
-        return []
-user = load_users()
 def admin_panel(admin):
     while True:
         choice = input(
             "1-add user\n"
             "2-view user\n"
-            "3-log out\n"
+            "3-activate/deactivate user\n"
+            "4-log out\n"
         )
         if choice == "1":
             role = input("Enter user type (coach/member): ").strip().lower()
@@ -74,12 +23,39 @@ def admin_panel(admin):
             else:
                 print("Invalid user type. Please enter 'coach' or 'member'.")
         elif choice == "2":
-            if not user:
+            try:
+                all_users = UserRepository.allusers()
+            except ClubError as e:
+                print("Error:", e)
+                continue
+            if not all_users:
                 print("No users found.")
-            else:
-                for u in user:
-                    print(u.show_info())
+            for u in all_users:
+                if u.is_active:
+                    status = "active"
+                else:
+                    status = "inactive"
+                print(f"{u.name} | {u.username} | {u.role} | {u.email} | {status}")
         elif choice == "3":
+            username = input("Enter username of the user to activate/deactivate: ").strip()
+            try:
+                all_users = UserRepository.allusers()
+                found = False
+                for u in all_users:
+                    if u.username == username:
+                        found = True
+                        if u.role == "admin":
+                            print("You cannot deactivate an admin user.")
+                            break
+                        u.is_active = not u.is_active
+                        UserRepository.save_all(all_users)
+                        print(f"User {u.name} is now {'active' if u.is_active else 'inactive'}.")
+                        break
+                if not found:
+                    print("User not found.")
+            except ClubError as e:
+                print("Error:", e)
+        elif choice == "4":
             return 
         else:
             print("Invalid choice.")
