@@ -1,4 +1,4 @@
-
+from datetime import datetime
 #--------------------------------------------
 # کلاس کاربرها
 #-------------------------------------------
@@ -121,88 +121,82 @@ class SportClass:
 #     کلاس اشتراک
 # ------------------------------                   
 class Subscription:
-    _ALLOW_INIT = False
-    def __init__(self,
-                 member_username, subscription_type, amount, payment_date, 
-                 start_date, end_date, subscription_code, subscription_state):
-        if not Subscription._ALLOW_INIT:
-            raise RuntimeError(
-                " instance creating directly is not allowed. "
-            )
-        self.member_username = member_username
-        self.subscription_type = subscription_type
-        self.amount = amount
-        self.payment_date = payment_date
-        self.start_date = start_date
-        self.end_date = end_date
-        self.subscription_code = subscription_code
-        self.subscription_state = subscription_state  # active/expired/no-subscription
+    def __init__(self, subscription_id: int, name: str, duration_months: int, price: float):
+        self.subscription_id = subscription_id
+        self.name = name
+        self.duration_months = duration_months
+        self.price = price
 
     def to_dict(self):
-        d={}
-        d["member_username"] = self.member_username
-        d["subscription_type"] = self.subscription_type           
-        d["amount"] = self.amount
-        d["payment_date"] = self.payment_date
-        d["start_date"] = self.start_date
-        d["end_date"] = self.end_date            
-        d["subscription_code"] = self.subscription_code
-        d["subscription_state"] = self.subscription_state
-        return d
+        return {
+            "id": self.subscription_id,
+            "name": self.name,
+            "duration_months": self.duration_months,
+            "price": self.price
+        }
 
     @classmethod
-    def from_dict(cls,d):
-        cls._ALLOW_INIT = True
-        try:
-            return cls(member_username = d["member_username"],
-                        subscription_type = d["subscription_type"],
-                        amount = d["amount"],
-                        payment_date = d["payment_date"],
-                        start_date = d["start_date"],
-                        end_date = d["end_date"] ,           
-                        subscription_code = d["subscription_code"],
-                        subscription_state = d.get("subscription_state", "no-subscription"))
-        finally:
-            cls._ALLOW_INIT = False
+    def from_dict(cls, data: dict):
+        return cls(
+            subscription_id=data.get("id"),
+            name=data.get("name"),
+            duration_months=data.get("duration_months"),
+            price=data.get("price")
+        )
 
 #--------------------------------------------
 # کلاس تراکنش
 #-------------------------------------------
 class Transaction:
-    _ALLOW_INIT = False
-    def __init__(self, username, tx_type, amount, date_, description, code_peigiri):
-        if not Transaction._ALLOW_INIT:
-            raise RuntimeError(
-                " instance creating directly is not allowed. "
-            )
-        self.username= username
-        self.tx_type = tx_type
+    def __init__(self, transaction_id: str, user_id: str, amount: float, subscription_name: str, duration_months: int, status: str = "موفق"):
+        self.transaction_id = transaction_id
+        self.user_id = user_id
         self.amount = amount
-        self.date = date_
-        self.description = description
-        self.code_peigiri = code_peigiri
+        self.subscription_name = subscription_name
+        self.duration_months = duration_months
+        
+        self.start_date = datetime.now()
+        
+        self.end_date = self._calculate_end_date(self.start_date, duration_months)
+        
+        self.status = status
+
+    def _calculate_end_date(self, start: datetime, months: int) -> datetime:
+        new_year = start.year
+        new_month = start.month + months
+        
+        if new_month > 12:
+            new_year += new_month // 12
+            new_month = new_month % 12
+            if new_month == 0:
+                new_month = 12
+                new_year -= 1
+
+        new_day = start.day
+
+        return start.replace(year=new_year, month=new_month, day=new_day)
 
     def to_dict(self):
-        d={}
-        d["username"] = self.username
-        d["tx_type"] = self.tx_type           
-        d["amount"] = self.amount
-        d["date"] = self.date
-        d["description"] = self.description
-        d["code_peigiri"] = self.code_peigiri  
-        return d
+        return {
+            "transaction_id": self.transaction_id,
+            "user_id": self.user_id,
+            "amount": self.amount,
+            "subscription_name": self.subscription_name,
+            "duration_months": self.duration_months,
+            "start_date": self.start_date.isoformat(),
+            "end_date": self.end_date.isoformat(),
+            "status": self.status
+        }
 
     @classmethod
-    def from_dict(cls,d):
-        cls._ALLOW_INIT = True
-        try:
-            return cls(username = d["username"],
-                        tx_type = d["tx_type"],
-                        amount = d["amount"],
-                        date_ = d["date"],
-                        description = d["description"],
-                        code_peigiri = d["code_peigiri"])  
-        finally:
-            cls._ALLOW_INIT = False
-
-            
+    def from_dict(cls, data: dict):
+        obj = cls.__new__(cls)
+        obj.transaction_id = data.get("transaction_id")
+        obj.user_id = data.get("user_id")
+        obj.amount = data.get("amount")
+        obj.subscription_name = data.get("subscription_name")
+        obj.duration_months = data.get("duration_months")
+        obj.start_date = datetime.fromisoformat(data["start_date"])
+        obj.end_date = datetime.fromisoformat(data["end_date"])
+        obj.status = data.get("status", "succes")
+        return obj
