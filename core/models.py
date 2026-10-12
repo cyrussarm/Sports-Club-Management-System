@@ -43,11 +43,12 @@ class Users:
 #-------------------------------------------
 class Salon:
     _ALLOW_INIT = False
-    def __init__(self,name,capacity,equipments,is_active):
+    def __init__(self, id_, name,capacity,equipments,is_active):
         if not Salon._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed "
             )
+        self.id = id_
         self.name = name
         self.capacity = capacity
         self.equipments = equipments        
@@ -55,6 +56,7 @@ class Salon:
 
     def to_dict(self):
         d={}
+        d["id"] = self.id
         d["name"] = self.name
         d["capacity"] = self.capacity
         d["equipments"] = self.equipments           
@@ -65,7 +67,7 @@ class Salon:
     def from_dict(cls,d):
         cls._ALLOW_INIT = True
         try:
-            return cls (name=d["name"], capacity = d["capacity"], equipments = d["equipments"], is_active = d.get("is_active", True))
+            return cls (id_=d["id"], name=d["name"], capacity = d["capacity"], equipments = d["equipments"], is_active = d.get("is_active", True))
         finally:
             cls._ALLOW_INIT = False
 #--------------------------------------------
@@ -73,25 +75,29 @@ class Salon:
 #-------------------------------------------
 class SportClass:
     _ALLOW_INIT = False
-    def __init__(self, title,sport_type, coach_username, hall_name, day, time, capacity, enrolled, is_active):
+
+    def __init__(self, id_, title, sport_type, coach_name, coach_username,
+                 hall_name, day, time, capacity, enrolled, is_active):
         if not SportClass._ALLOW_INIT:
-            raise RuntimeError(
-                " instance creating directly is not allowed. "
-            )
+            raise RuntimeError("instance creating directly is not allowed.")
+        self.id = id_
         self.title = title
         self.sport_type = sport_type
+        self.coach_name = coach_name
         self.coach_username = coach_username
         self.hall_name = hall_name
         self.day = day
         self.time = time
         self.capacity = capacity
         self.enrolled = enrolled
-        self.is_active = is_active    
-    
+        self.is_active = is_active
+
     def to_dict(self):
-        d={}
+        d = {}
+        d["id"] = self.id
         d["title"] = self.title
-        d["sport_type"] = self.sport_type           
+        d["sport_type"] = self.sport_type
+        d["coach_name"] = self.coach_name
         d["coach_username"] = self.coach_username
         d["hall_name"] = self.hall_name
         d["day"] = self.day
@@ -102,33 +108,41 @@ class SportClass:
         return d
 
     @classmethod
-    def from_dict(cls,d):
+    def from_dict(cls, d):
         cls._ALLOW_INIT = True
         try:
-            return cls(title = d["title"], sport_type = d["sport_type"], 
-                   coach_username = d["coach_username"], hall_name = d["hall_name"], 
-                   day = d["day"], time = d["time"], capacity = d["capacity"], 
-                   enrolled = d.get("enrolled",[]), is_active = d.get("is_active", True))
+            return cls(
+                id_=d["id"],
+                title=d["title"],
+                sport_type=d["sport_type"],
+                coach_name=d["coach_name"],
+                coach_username=d["coach_username"],
+                hall_name=d["hall_name"],
+                day=d["day"],
+                time=d["time"],
+                capacity=d["capacity"],
+                enrolled=d.get("enrolled", []),
+                is_active=d.get("is_active", True),
+            )
         finally:
             cls._ALLOW_INIT = False
 
-    # ظرفیت باقی‌مانده 
     def remaining_capacity(self):
-        return self.capacity-len(self.enrolled)
-
+        return self.capacity - len(self.enrolled)
 
 # ------------------------------
 #     کلاس اشتراک
 # ------------------------------                   
 class Subscription:
     _ALLOW_INIT = False
-    def __init__(self,
+    def __init__(self, id_,
                  member_username, subscription_type, amount, payment_date, 
                  start_date, end_date, subscription_code, subscription_state):
         if not Subscription._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed. "
             )
+        self.id = id_
         self.member_username = member_username
         self.subscription_type = subscription_type
         self.amount = amount
@@ -140,6 +154,7 @@ class Subscription:
 
     def to_dict(self):
         d={}
+        d["id"] = self.id
         d["member_username"] = self.member_username
         d["subscription_type"] = self.subscription_type           
         d["amount"] = self.amount
@@ -154,7 +169,7 @@ class Subscription:
     def from_dict(cls,d):
         cls._ALLOW_INIT = True
         try:
-            return cls(member_username = d["member_username"],
+            return cls(id_=d["id"], member_username = d["member_username"],
                         subscription_type = d["subscription_type"],
                         amount = d["amount"],
                         payment_date = d["payment_date"],
@@ -170,11 +185,12 @@ class Subscription:
 #-------------------------------------------
 class Transaction:
     _ALLOW_INIT = False
-    def __init__(self, username, tx_type, amount, date_, description, code_peigiri):
+    def __init__(self, id_, username, tx_type, amount, date_, description, code_peigiri):
         if not Transaction._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed. "
             )
+        self.id = id_
         self.username= username
         self.tx_type = tx_type
         self.amount = amount
@@ -184,6 +200,7 @@ class Transaction:
 
     def to_dict(self):
         d={}
+        d["id"] = self.id
         d["username"] = self.username
         d["tx_type"] = self.tx_type           
         d["amount"] = self.amount
@@ -196,7 +213,7 @@ class Transaction:
     def from_dict(cls,d):
         cls._ALLOW_INIT = True
         try:
-            return cls(username = d["username"],
+            return cls(id_=d["id"], username = d["username"],
                         tx_type = d["tx_type"],
                         amount = d["amount"],
                         date_ = d["date"],

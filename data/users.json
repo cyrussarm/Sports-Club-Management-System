@@ -2,8 +2,8 @@
     {
         "id": 1,
         "name": "سیروس سرمستی",
-        "username": "sirus56@",
-        "password": "passExample123&",
+        "username": "s",
+        "password": "s135@",
         "email": "sirus@gmail.com",
         "role": "admin",
         "is_active": true
@@ -23,7 +23,7 @@
         "username": "reza_3451&",
         "password": "ReZaORD#4%2%%&",
         "email": "reza@hotmail.ir",
-        "role": "member",
+        "role": "coach",
         "is_active": true
     },
     {
