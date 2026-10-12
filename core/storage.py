@@ -7,15 +7,15 @@ data_dir = Path("data")
 def load_data(filename):
     path = data_dir/filename
 
-    if not path.exists():
-        raise StorageError(f"data file not found: {path}")
+    if not path.exists():        
+        return []
 
     try:
         # Convert from JSON to Python:
         with open(path,"r",encoding="utf-8") as f:
             return json.load(f)
-    except:
-        raise StorageError(f"failed to load {filename}")
+    except (OSError, json.JSONDecodeError) as e:
+        raise StorageError(f"failed to load {filename}: {e}") from e
 
 def save_data(filename, data):
     try:
