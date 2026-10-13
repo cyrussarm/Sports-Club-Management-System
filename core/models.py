@@ -5,7 +5,7 @@ from datetime import datetime
 #-------------------------------------------
 class Users:
     _ALLOW_INIT = False
-    def __init__(self, id_, name, username, password, email, role, is_active):
+    def __init__(self, id_, name, username, password, email, role, is_active ,wallet_balance = 0.0):
         if not Users._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed "
@@ -18,6 +18,7 @@ class Users:
         self.email = email
         self.role = role
         self.is_active = is_active
+        self.wallet_balance = wallet_balance
 
     def to_dict(self):
         d = {}
@@ -28,6 +29,7 @@ class Users:
         d["email"] = self.email
         d["role"] = self.role
         d["is_active"] = self.is_active
+        s["Wallet balance"] = self.wallet_balance
         return d
 
     @classmethod
@@ -35,7 +37,7 @@ class Users:
         cls._ALLOW_INIT = True
         try:
             return cls(id_=d["id"], name=d["name"], username=d["username"], password=d["password"],
-                       email=d["email"], role=d["role"], is_active=d.get("is_active", True))
+                       email=d["email"], role=d["role"], is_active=d.get("is_active", True), wallet_balance==d["Wallet balance"])
         finally:
             cls._ALLOW_INIT = False
        
@@ -60,7 +62,7 @@ class Salon:
         d["id"] = self.id
         d["name"] = self.name
         d["capacity"] = self.capacity
-        d["equipments"] = equipments         
+        d["equipments"] = self.equipments         
         d["is_active"] = self.is_active
         return d
 
@@ -157,11 +159,11 @@ class Subscription:
         d = {}
         d["id"] = self.id
         d["member_username"] = self.member_username
-        d["subscription_type"] = subscription_type         
+        d["subscription_type"] = self.subscription_type         
         d["amount"] = self.amount
         d["payment_date"] = self.payment_date
         d["start_date"] = self.start_date
-        d["end_date"] = end_date           
+        d["end_date"] = self.end_date           
         d["subscription_code"] = self.subscription_code
         d["subscription_state"] = self.subscription_state
         return d
@@ -186,28 +188,26 @@ class Subscription:
 #-------------------------------------------
 class Transaction:
     _ALLOW_INIT = False
-    def __init__(self, id_, username, tx_type, amount, date_, description, code_peigiri):
+    def __init__(self, transaction_id, user_id, amount, subscription_name, duration_mounths, status):
         if not Transaction._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed. "
             )
-        self.id = id_
-        self.username = username
-        self.tx_type = tx_type         
+        self.transaction_id = transactin_id
+        self.user_id = user_id
         self.amount = amount
-        self.date = date_
-        self.description = description
-        self.code_peigiri = code_peigiri  
+        self.subscription_name = subscription_name
+        self.duration_mounths = duration_mounths
+        self.status = status
 
     def to_dict(self):
         d = {}
-        d["id"] = self.id
-        d["username"] = self.username
-        d["tx_type"] = self.tx_type         
+        d["id"] = self.transaction_id
+        d["username"] = self.user_id
         d["amount"] = self.amount
-        d["date"] = self.date
-        d["description"] = self.description
-        d["code_peigiri"] = self.code_peigiri  
+        d["subscription name"] = self.subscription_name
+        d["duration mounths"] = self.duration_mounths
+        d["status"] = self.status
         return d
 
     @classmethod
@@ -215,10 +215,9 @@ class Transaction:
         cls._ALLOW_INIT = True
         try:
             return cls(id_=d["id"], username=d["username"],
-                       tx_type=d["tx_type"],
                        amount=d["amount"],
-                       date_=d["date"],
-                       description=d["description"],
-                       code_peigiri=d["code_peigiri"])  
+                       subscription_name=d["subscription name"],
+                       duration_mounths=d["duration mounths"],
+                       status=d["status"])  
         finally:
             cls._ALLOW_INIT = False

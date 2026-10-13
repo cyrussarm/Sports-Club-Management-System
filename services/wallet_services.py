@@ -1,20 +1,22 @@
 from datetime import datetime
 import random
 from core.models import Transaction
-from Repositories.transactions_repository import TransactionRepository
-from Bank import validate  
+from Repositories.TransactionRepository import TransactionRepository
+from Bank import API 
 from core.exceptions import NotEnoughMoney
+bank = API()
 
 class WalletService:
     
     @staticmethod
-    def charge_wallet(member, amount: float, card_details: dict) -> bool:
+    def charge_wallet(member, amount: float, card_details: dict) :
         #اعتبار سنجی کارت به کمک bank.py
-        validation_result = validate(
-            card_details.get("card_number"),
-            card_details.get("cvv2"),
-            card_details.get("expire_date"),
-            card_details.get("pin")
+        validation_result = bank.validate(
+            card_details.get("card"),
+            card_details.get("exp_mounth"),
+            card_details.get("exp_year") ,
+            card_details.get("password"),
+            card_details.get("cvv2")
         )
         #اگر خروجی بانک به صورت دیکشنری یا بولین باشد :
         is_valid = validation_result if isinstance(validation_result, bool) else validation_result.get("is_valid", True)

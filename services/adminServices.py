@@ -593,8 +593,8 @@ def view_all_financial_transactions(current_role):
             return
             
         print("All transactions : ")
-        for tx in transactions:
-            print(f"id : {tx.id} | user's id : {tx.username} | type:: {tx.tx_type} | amount : {tx.amount} | date : {tx.date}")
+        for t in transactions:
+            print(f"id : {t.transaction_id} | user's id : {t.user_id} | amount :: {t.amount} | subscription's name : {t.subscription_name} | duration mounths : {t.duration_mounths} | status: {t.status}")
         print("------------------------------------------")
     except ClubError as e:
         print(f"Error: {e}")
