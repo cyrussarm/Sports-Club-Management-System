@@ -10,9 +10,9 @@
 # 
 
 from core.models import Users
-from Repositories.BaseRepository import BaseRepository
+from Repositories.base_repository import base_repository
 
-class UserRepository(BaseRepository):
+class UserRepository(base_repository):
     file_name = "users.json"
     model = Users
     

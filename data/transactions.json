@@ -1,0 +1,22 @@
+[
+    {
+        "id": "BNK-123456",
+        "user_id": "kobraf",
+        "amount": 100.0,
+        "subscription_name": "Wallet charging",
+        "duration_months": 0,
+        "start_date": "2026-10-13T14:30:00.123456",
+        "end_date": "2026-10-13T14:30:00.123456",
+        "status": "success"
+    },
+    {
+        "id": "BNK-145071",
+        "user_id": "kobraf",
+        "amount": 100.0,
+        "subscription_name": "Wallet charging",
+        "duration_months": 0,
+        "start_date": "2026-10-13T17:36:28.972078",
+        "end_date": "2026-10-13T17:36:28.972078",
+        "status": "success"
+    }
+]
