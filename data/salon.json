@@ -1,9 +1,41 @@
 [
     {
+        "id": 1,
         "name": "salon-01",
-        "capacity": 20, 
-        "equipments": ["Treadmill", "dumbbells", "bicycle"],
+        "capacity": 20,
+        "equipments": [
+            "Treadmill",
+            "dumbbells",
+            "bicycle"
+        ],
+        "is_active": true
+    },
+    {
+        "id": 2,
+        "name": "Salon-02",
+        "capacity": 10,
+        "equipments": [
+            "T"
+        ],
+        "is_active": false
+    },
+    {
+        "id": 3,
+        "name": "salon-03",
+        "capacity": 12,
+        "equipments": [
+            "s",
+            "f"
+        ],
+        "is_active": true
+    },
+    {
+        "id": 4,
+        "name": "salon-10",
+        "capacity": 1,
+        "equipments": [
+            "sd"
+        ],
         "is_active": true
     }
-
 ]

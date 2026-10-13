@@ -3,53 +3,65 @@
 # UserRepository.find_by_id(1) : پیدا کردن کاربر با یک آیدی
 # UserRepository.add(user) : اضافه کردن کاربر به لیست کاربران
 # UserRepository.update(user): آپدیت مشخصات یک کاربر
-# UserRepository.delete(id): حذف یک کاربر 
 # این لایه کاری میکنه که بقیه تیم کار نداشته باشند که داده ها در جیسن هستند در دیتابیس هستند یا لیست هستند.
 # میگه تو چی کار داری کاربرهای کجا ذخیره میشن فقط یک اینترفیس داشته باش برای کار کردن با داده ها
 # اینطوری بعدا اگر مثلا داده ها انتقال داده شدند به دیتابیس لازم نیست همه کد را دست بزنیم
 # از این کلاس نمونه ای نخواهیم ساخت و به صورت کلاس ازش استفاده خواهیم کرد
 # 
 
-from core.storage import load_data, save_data
 from core.models import Users
+from Repositories.BaseRepository import BaseRepository
 
-class UserRepository:
+class UserRepository(BaseRepository):
     file_name = "users.json"
+    model = Users
     
-    # برگرداندن لیست همه کاربران به صورت لیستی از شی ها
+    # پیدا کردن یک کاربر با استفاده از یوزر نیم
     @classmethod
-    def allusers(cls):
-        raw_data_as_dict = load_data(cls.file_name)
-        users = []
-        for dict_ in raw_data_as_dict:
-            users.append(Users.from_dict(dict_))
-        return users
+    def find_by_username(cls, username_):
+        users = cls.all()          
+        for user in users:
+            if str(user.username) == str(username_):
+                return user
+        return None
+
+    #دریافت لیست کاربران با نقش مشخص 
+    @classmethod
+    def list_of_given_role(cls, role_):
+        list_=[]
+        users = cls.all() 
+        for user in users:
+            if user.role == role_:
+                list_.append(user)
+        return list_
+
+    # اور رایت متد add با بررسی یکتایی یوزرنیم
+    @classmethod
+    def add(cls,user):        
+        if cls.find_by_username(user.username) is not None:
+            return False 
+        return super().add(user)         
+
+    # یافتن شی های فعال
+    @classmethod
+    def list_active(cls):
+        objects = cls.all()
+        return [obj_ for obj_ in objects if obj_.is_active]
 
     @classmethod
-    def save_all(cls, objs):
-        list_ = []
-        # تبدیل لیست شی ها به لیست دیکشنری
-        # اینجا نیازی نیست بگیم obj از چه نوعیه
-        # پایتون خودش تایپ شی را بررسی میکنه و میره متد همان کلاس را اجرا میکنه
-        for obj in objs:
-            list_.append(obj.to_dict())
-        # ذخیره کردن لیست دیکشنری در فایل json        
-        save_data(cls.file_name, list_)
+    def list_active_with_username_and_role (cls, role_, username):
+        return[obj_ for obj_ in cls.list_active() if obj_.role == role_ and obj_.username==username]
+
+    # اولین مطابقت یافته شده را برگردان یا None
+    @classmethod
+    def find_active_with_username_and_role (cls, role_, username):        
+        return next((obj_ for obj_ in cls.list_active() 
+                     if obj_.role == role_ and obj_.username==username),None)
+        
+        
+         
+
+        
         
 
-
-        
-
-    # پیدا کردن یک کاربر با استفاده از آی دی
-    @classmethod
-    def find_user_by_id(cls, user_id):
-        raw_data_as_dict = load_data(cls.file_name)
-        for dict_ in raw_data_as_dict:
-            pass
-
-    # افزودن کاربر جدید
-    @classmethod
-    def add_new_user(cls, user):
-
-        pass
 

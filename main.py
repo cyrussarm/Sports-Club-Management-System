@@ -1,36 +1,37 @@
-from core.storage import load_data
-from services.add_user import add_user
-from core.exceptions import ClubError
-from Repositories.users_repository import UserRepository
 
-from tests.test_models import test_model
-
-test_model()
+from panels.adminLogin import admin_login, admin_panel
 
 
-try:
-    res = load_data("users.json")
-    for r in res:
-        print(f"{r}\n")
-except ClubError as e:
-    print(f"Error: {e}")
+def main():
+    while True:
+        choice = input(
+            "1-admin login\n"
+            "2-coach login\n"
+            "3-member login\n"
+            "4-exit\n"
+            "Select: "
+        )
+        if choice == "1":
+            admin = admin_login()
+            if admin:
+                admin_panel()
+            else:
+                print("Invalid admin credentials.")
+        elif choice == "2":
+            pass
+            # coach_username = input("Enter coach username: ").strip()
+            # coach_password = input("Enter coach password: ").strip()
+            # print("Coach login functionality is not implemented yet.")
+        elif choice == "3":
+            pass
+            # member_username = input("Enter member username: ").strip()
+            # member_password = input("Enter member password: ").strip()
+            # print("Member login functionality is not implemented yet.")
+        elif choice == "4" :
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
 
-try:
-    current_user = {"id": 4,
-        "name": "kobra",
-        "username": "kobraf",
-        "password": "password1&",
-        "email": "kobra.k@gmail.com",
-        "role": "member",
-        "is_active": True}
-    add_user(current_user, "kobra","kobraf","password2&","kobra.k@gmail.com","member")
-except ClubError as e:
-    print(f"Error: {e}")
-
-# test repository
-# چاپ نام همه کاربران از فایل users.json
-for i in range(len(UserRepository.allusers())):
-    print(UserRepository.allusers()[i].name) 
-
-objs = UserRepository.allusers()
-UserRepository.save_all(objs)
+if __name__=="__main__":
+    main()
