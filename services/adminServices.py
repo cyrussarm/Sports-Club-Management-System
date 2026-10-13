@@ -5,6 +5,9 @@
 from Repositories.users_repository import UserRepository
 from Repositories.KelasRepository import KelasRepository
 from Repositories.HallsRepository import SalonsRepository
+from Repositories.SubscriptionsRepository import SubsRepository
+from Repositories.TransactionRepository import TransactionRepository
+from services import wallet_services
 from core.exceptions import ClubError
 from services.validation import validate_user_registration
 from core.models import Users, SportClass, Salon
@@ -537,9 +540,22 @@ def change_activity_class(current_role):
     except ClubError as e:
         print(f"Error:, {e}")
         return
+def get_all_members_subscriptions():
+    #مشاهده وضعیت اشتراک همه اعضا
+    return SubscriptionsRepository.get_all()
 
+def get_all_transactions():
+    #دریافت کل تراکنش ها و پرداخت ها
+    return TransactionRepository.get_all()
 
-
-
-
-        
+def purchase_subscription_with_wallet(username, subscription_type, amount):
+    # کنترل موجودی کیف پول و اگر اوکی بود خرید اشتراک
+    wallet_balance = WalletServices.get_balance(username)
+    
+    if wallet_balance < amount:
+        raise ValueError("The money in your wallet isn't enough, please top up")
+    
+    # ثبت تراکنش
+    WalletServices.withdraw(username, amount)
+    # ثبت اشتراک
+    return True

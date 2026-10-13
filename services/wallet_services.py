@@ -38,7 +38,7 @@ class WalletService:
             transaction_id=bank_tracking_no,
             user_id=getattr(member, 'username', 'user_unknown'),
             amount=amount,
-            subscription_name="شارژ کیف پول (درگاه بانکی)",
+            subscription_name="topping up the wallet",
             duration_months=0,
             status="success"
         )
