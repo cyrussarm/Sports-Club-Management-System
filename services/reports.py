@@ -1,11 +1,11 @@
 from Repositories.users_repository import UserRepository
-from Repositories.KelasRepository import KelasRepository
-from Repositories.SubscriptionsRepository import SubsRepository
+from Repositories.classes_repository import KelasRepository
+from Repositories.subscriptions_repository import Subs_repository
 
 def show_reports():
     users = UserRepository.all()
     classes = KelasRepository.all()
-    subscriptions = SubsRepository.all()
+    subscriptions = Subs_repository.all()
 
     # --- basic reports ---
     active_members = 0
@@ -23,7 +23,7 @@ def show_reports():
 
     total_revenue = 0
     for s in subscriptions:
-        total_revenue += s["amount"]
+        total_revenue += s.amount
 
     print("===== Reports =====")
     print(f"Active members: {active_members}")
@@ -34,7 +34,7 @@ def show_reports():
     # --- advanced: revenue per subscription type ---
     revenue_by_type = {}
     for s in subscriptions:
-        sub_type = s["subscription_type"]
+        sub_type = s.subscription_type
         if sub_type not in revenue_by_type:
             revenue_by_type[sub_type] = 0
         revenue_by_type[sub_type] += s["amount"]
