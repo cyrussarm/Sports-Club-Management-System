@@ -7,7 +7,6 @@ from Repositories.KelasRepository import KelasRepository
 from Repositories.HallsRepository import SalonsRepository
 from Repositories.SubscriptionsRepository import SubsRepository
 from Repositories.TransactionRepository import TransactionRepository
-from services import wallet_services
 from core.exceptions import ClubError
 from services.validation import validate_user_registration
 from core.models import Users, SportClass, Salon
@@ -595,7 +594,7 @@ def view_all_financial_transactions(current_role):
             
         print("All transactions : ")
         for tx in transactions:
-            print(f"id : {tx.transaction_id} | user's id : {tx.username} | type:: {tx.tx_type} | amount : {tx.amount} | date : {tx.date}")
+            print(f"id : {tx.id} | user's id : {tx.username} | type:: {tx.tx_type} | amount : {tx.amount} | date : {tx.date}")
         print("------------------------------------------")
     except ClubError as e:
         print(f"Error: {e}")
