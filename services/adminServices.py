@@ -559,3 +559,43 @@ def purchase_subscription_with_wallet(username, subscription_type, amount):
     WalletServices.withdraw(username, amount)
     # ثبت اشتراک
     return True
+
+
+
+def view_members_subscriptions(current_role):
+    #برای گزارش وضعیت اشتراک اعضا برای مدیر
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is allowd to do this")
+        return
+    
+    try:
+        subscriptions = SubsRepository.get_all()
+        if not subscriptions:
+            print("No subscriptions found")
+            return
+            
+        print("Member's subscriptions status:")
+        for sub in subscriptions:
+            print(f"username: {sub.member_username} | subscription's type: {sub.subscription_type} | End date :{sub.end_date} | Subscription's state: {sub.subscription_state}" )
+        print("------------------------------")
+    except ClubError as e:
+        print(f"Error: {e}")
+
+def view_all_financial_transactions(current_role):
+    # مشاهده پرداخت ها و لیست مالی 
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is allowed to do this")
+        return
+        
+    try:
+        transactions = TransactionRepository.all_transactions() 
+        if not transactions:
+            print("There is no transaction")
+            return
+            
+        print("All transactions : ")
+        for tx in transactions:
+            print(f"id : {tx.transaction_id} | user's id : {tx.username} | type:: {tx.tx_type} | amount : {tx.amount} | date : {tx.date}")
+        print("------------------------------------------")
+    except ClubError as e:
+        print(f"Error: {e}")

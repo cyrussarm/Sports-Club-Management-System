@@ -3,6 +3,7 @@ import random
 from core.models import Transaction
 from Repositories.transactions_repository import TransactionRepository
 from Bank import validate  
+from core.exceptions import NotEnoughMoney
 
 class WalletService:
     
@@ -49,7 +50,7 @@ class WalletService:
     def process_subscription_purchase(member, subscription_plan):
         current_balance = getattr(member, 'wallet_balance', 0.0)
         if current_balance < subscription_plan.price:
-            print("The money in your wallet isn't enough, please top up")
+            raise NotEnoughMoney(f"The money in your wallet isn't enough, please top up; You need {subscription_plan.price}")
             return False
             
         member.wallet_balance -= subscription_plan.price
