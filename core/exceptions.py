@@ -21,3 +21,6 @@ class StorageError(ClubError):
 
 class BackToMenu(Exception):
     pass
+
+class NotEnoughMoney(Exception) :
+    pass

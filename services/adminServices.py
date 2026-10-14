@@ -563,9 +563,62 @@ def change_activity_class(current_role):
     except ClubError as e:
         print(f"Error:, {e}")
         return
+def get_all_members_subscriptions():
+    #مشاهده وضعیت اشتراک همه اعضا
+    return SubscriptionsRepository.get_all()
+
+def get_all_transactions():
+    #دریافت کل تراکنش ها و پرداخت ها
+    return TransactionRepository.get_all()
+
+def purchase_subscription_with_wallet(username, subscription_type, amount):
+    # کنترل موجودی کیف پول و اگر اوکی بود خرید اشتراک
+    wallet_balance = WalletServices.get_balance(username)
+    
+    if wallet_balance < amount:
+        raise ValueError("The money in your wallet isn't enough, please top up")
+    
+    # ثبت تراکنش
+    WalletServices.withdraw(username, amount)
+    # ثبت اشتراک
+    return True
 
 
 
+def view_members_subscriptions(current_role):
+    #برای گزارش وضعیت اشتراک اعضا برای مدیر
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is allowd to do this")
+        return
+    
+    try:
+        subscriptions = SubsRepository.get_all()
+        if not subscriptions:
+            print("No subscriptions found")
+            return
+            
+        print("Member's subscriptions status:")
+        for sub in subscriptions:
+            print(f"username: {sub.member_username} | subscription's type: {sub.subscription_type} | End date :{sub.end_date} | Subscription's state: {sub.subscription_state}" )
+        print("------------------------------")
+    except ClubError as e:
+        print(f"Error: {e}")
 
-
+def view_all_financial_transactions(current_role):
+    # مشاهده پرداخت ها و لیست مالی 
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is allowed to do this")
+        return
         
+    try:
+        transactions = TransactionRepository.all_transactions() 
+        if not transactions:
+            print("There is no transaction")
+            return
+            
+        print("All transactions : ")
+        for t in transactions:
+            print(f"id : {t.transaction_id} | user's id : {t.user_id} | amount :: {t.amount} | subscription's name : {t.subscription_name} | duration mounths : {t.duration_mounths} | status: {t.status}")
+        print("------------------------------------------")
+    except ClubError as e:
+        print(f"Error: {e}")

@@ -4,7 +4,7 @@ from datetime import datetime
 #-------------------------------------------
 class Users:
     _ALLOW_INIT = False
-    def __init__(self,id_,name,username,password,email,role,is_active):
+    def __init__(self, id_, name, username, password, email, role, is_active ,wallet_balance = 0.0):
         if not Users._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed "
@@ -17,9 +17,10 @@ class Users:
         self.email = email
         self.role = role
         self.is_active = is_active
+        self.wallet_balance = wallet_balance
 
     def to_dict(self):
-        d={}
+        d = {}
         d["id"] = self.id
         d["name"] = self.name
         d["username"] = self.username
@@ -27,14 +28,15 @@ class Users:
         d["email"] = self.email
         d["role"] = self.role
         d["is_active"] = self.is_active
+        s["Wallet balance"] = self.wallet_balance
         return d
 
     @classmethod
-    def from_dict(cls,d):
+    def from_dict(cls, d):
         cls._ALLOW_INIT = True
         try:
-            return cls(id_=d["id"], name = d["name"], username = d["username"], password = d["password"],
-                   email = d["email"], role = d["role"], is_active = d.get("is_active", True))
+            return cls(id_=d["id"], name=d["name"], username=d["username"], password=d["password"],
+                       email=d["email"], role=d["role"], is_active=d.get("is_active", True), wallet_balance==d["Wallet balance"])
         finally:
             cls._ALLOW_INIT = False
        
@@ -43,7 +45,7 @@ class Users:
 #-------------------------------------------
 class Salon:
     _ALLOW_INIT = False
-    def __init__(self, id_, name,capacity,equipments,is_active):
+    def __init__(self, id_, name, capacity, equipments, is_active):
         if not Salon._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed "
@@ -51,25 +53,26 @@ class Salon:
         self.id = id_
         self.name = name
         self.capacity = capacity
-        self.equipments = equipments        
+        self.equipments = equipments         
         self.is_active = is_active
 
     def to_dict(self):
-        d={}
+        d = {}
         d["id"] = self.id
         d["name"] = self.name
         d["capacity"] = self.capacity
-        d["equipments"] = self.equipments           
+        d["equipments"] = self.equipments         
         d["is_active"] = self.is_active
         return d
 
     @classmethod
-    def from_dict(cls,d):
+    def from_dict(cls, d):
         cls._ALLOW_INIT = True
         try:
-            return cls (id_=d["id"], name=d["name"], capacity = d["capacity"], equipments = d["equipments"], is_active = d.get("is_active", True))
+            return cls(id_=d["id"], name=d["name"], capacity=d["capacity"], equipments=d["equipments"], is_active=d.get("is_active", True))
         finally:
             cls._ALLOW_INIT = False
+
 #--------------------------------------------
 # کلاس کلاسها
 #-------------------------------------------
@@ -131,12 +134,11 @@ class SportClass:
         return self.capacity - len(self.enrolled)
 
 # ------------------------------
-#     کلاس اشتراک
-# ------------------------------                   
+#   کلاس اشتراک
+# ------------------------------                     
 class Subscription:
     _ALLOW_INIT = False
-    def __init__(self, id_,
-                 member_username, subscription_type, amount, payment_date, 
+    def __init__(self, id_, member_username, subscription_type, amount, payment_date, 
                  start_date, end_date, subscription_code, subscription_state):
         if not Subscription._ALLOW_INIT:
             raise RuntimeError(
@@ -153,30 +155,30 @@ class Subscription:
         self.subscription_state = subscription_state  # active/expired/no-subscription
 
     def to_dict(self):
-        d={}
+        d = {}
         d["id"] = self.id
         d["member_username"] = self.member_username
-        d["subscription_type"] = self.subscription_type           
+        d["subscription_type"] = self.subscription_type         
         d["amount"] = self.amount
         d["payment_date"] = self.payment_date
         d["start_date"] = self.start_date
-        d["end_date"] = self.end_date            
+        d["end_date"] = self.end_date           
         d["subscription_code"] = self.subscription_code
         d["subscription_state"] = self.subscription_state
         return d
 
     @classmethod
-    def from_dict(cls,d):
+    def from_dict(cls, d):
         cls._ALLOW_INIT = True
         try:
-            return cls(id_=d["id"], member_username = d["member_username"],
-                        subscription_type = d["subscription_type"],
-                        amount = d["amount"],
-                        payment_date = d["payment_date"],
-                        start_date = d["start_date"],
-                        end_date = d["end_date"] ,           
-                        subscription_code = d["subscription_code"],
-                        subscription_state = d.get("subscription_state", "no-subscription"))
+            return cls(id_=d["id"], member_username=d["member_username"],
+                       subscription_type=d["subscription_type"],
+                       amount=d["amount"],
+                       payment_date=d["payment_date"],
+                       start_date=d["start_date"],
+                       end_date=d["end_date"],           
+                       subscription_code=d["subscription_code"],
+                       subscription_state=d.get("subscription_state", "no-subscription"))
         finally:
             cls._ALLOW_INIT = False
 
@@ -188,7 +190,7 @@ class Subscription:
 #-------------------------------------------
 class Transaction:
     _ALLOW_INIT = False
-    def __init__(self, id_, user_id, amount, subscription_name, duration_months, status="موفق"):
+    def __init__(self, transaction_id, user_id, amount, subscription_name, duration_mounths, status):
         if not Transaction._ALLOW_INIT:
             raise RuntimeError(
                 " instance creating directly is not allowed. "
@@ -268,7 +270,7 @@ class Exercise:
         return d
 
     @classmethod
-    def from_dict(cls,d):
+    def from_dict(cls, d):
         cls._ALLOW_INIT = True
         try:
             return cls(id_=d["id"], name = d["name"],
