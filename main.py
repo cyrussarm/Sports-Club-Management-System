@@ -1,8 +1,10 @@
 
-from panels.adminLogin import admin_login, admin_panel
-
+from panels.adminLogin import login, admin_panel, coach_panel
 
 def main():
+
+   
+
     while True:
         choice = input(
             "1-admin login\n"
@@ -12,13 +14,17 @@ def main():
             "Select: "
         )
         if choice == "1":
-            admin = admin_login()
+            admin = login("admin")
             if admin:
-                admin_panel()
+                admin_panel(admin.username)
             else:
                 print("Invalid admin credentials.")
         elif choice == "2":
-            pass
+            coach = login("coach")
+            if coach:
+                coach_panel(coach.username)
+            else:
+                print("Invalid coach")
             # coach_username = input("Enter coach username: ").strip()
             # coach_password = input("Enter coach password: ").strip()
             # print("Coach login functionality is not implemented yet.")

@@ -3,10 +3,10 @@
 ########################################################
 
 from Repositories.users_repository import UserRepository
-from Repositories.KelasRepository import KelasRepository
-from Repositories.HallsRepository import SalonsRepository
-from Repositories.SubscriptionsRepository import SubsRepository
-from Repositories.TransactionRepository import TransactionRepository
+from Repositories.classes_repository import KelasRepository
+from Repositories.halls_repository import SalonsRepository
+from Repositories.wallet_repository import WalletRepository
+from core.models import Wallet
 from core.exceptions import ClubError
 from services.validation import validate_user_registration
 from core.models import Users, SportClass, Salon
@@ -17,13 +17,20 @@ def generate_user_id():
     user_id = 1
     try:
         users = UserRepository.all()
-        return max(user.id for user in users)+1
+        user_id = max(int(user.id) for user in users)+1
     except ClubError: # فایل خالی یا خطا
         return user_id
 
+def generate_wallet_id():
+    wallet_id = 1
+    try:
+        wallets = WalletRepository.all()
+        wallet_id = max(int(wallet.id) for wallet in wallets) + 1
+    except ClubError:
+        return wallet_id
 # مدیریت کاربران : افزودن مربی یا عضو
 def add_user(current_role):    
-    if not current_role.lower() in ALLOWED_ROLES:
+    if not isinstance(current_role, str) or current_role.lower() not in ALLOWED_ROLES:
         print("Only the admin is authorized to do this.")
         return None
     while True:
@@ -33,34 +40,51 @@ def add_user(current_role):
         else:
             print("Invalid user type. Please enter 'coach' or 'member'.")
 
-        # برای نام در سند محدودیت ذکر نشده ولی چک میکنم که خالی نباشه
-        name = input("Enter name: ").strip()
-        username = input("Enter username: ").strip()
-        password = input("Enter password: ").strip()
-        email = input("Enter email: ").strip() 
-        if email=="":
-            email = None
-        # وارد کردن ایمیل اختیاری است ولی اگر وارد شد باید درست بودنش چک شود
-        user_is_valid, msg = validate_user_registration(name, username, password, email)
-        if user_is_valid:
-            user_id = generate_user_id()
-            user = Users.from_dict({"id":user_id, "name":name, "username":username, 
-                    "password":password,"email":email,"role":user_role,"is_active":True})
-            try:
-                Reg = UserRepository.add(user)
-                if Reg:
-                    print("User added successfully")
-                    return user
-                else:
-                    print("Registration faild: username already exists")
-                    return None
-            except ClubError as e:
-                print (f"Error:{e}")
-                return None
-        else:
-            print(msg)
+    # برای نام در سند محدودیت ذکر نشده ولی چک میکنم که خالی نباشه
+    name = input("Enter name: ").strip()
+    username = input("Enter username: ").strip()
+    password = input("Enter password: ").strip()
+    email = input("Enter email: ").strip() 
+    if email=="":
+        email = None
+    # وارد کردن ایمیل اختیاری است ولی اگر وارد شد باید درست بودنش چک شود
+    user_is_valid, msg = validate_user_registration(name, username, password, email)
+    if not user_is_valid:
+        print(msg)
+        return None
+    
+    # تولید یک id برای کاربر
+    user_id = generate_user_id()
+    # ساخت یک شی
+    user = Users.from_dict({"id":user_id, "name":name, "username":username, 
+            "password":password,"email":email,"role":user_role,"is_active":True})
+    try:
+        # اضافه کردن شی جدید به مخزن کاربرها
+        Reg = UserRepository.add(user)
+        if not Reg:               
+            print("Registration faild: username already exists")
             return None
-
+        # اگر کاربر از نوع ممبر است (مربی نیست) براش یک کیف با موجودی صفر پول بساز
+        # برای کیف پول یک آیدی هم تولید کن
+        # برای ایجاد شی اول باید یک دیکشنری بسازیم
+        if user.role == "member":
+            wallet = Wallet.from_dict({
+                "id": generate_wallet_id(),
+                "member_username": user.username,
+                "balance": 0.0
+             })
+        try:
+        # بعد، دیکشنری را با متد اد والت ریپازیتوری به شی تبدیل کنیم
+            WalletRepository.add(wallet)
+        except ClubError as e:                
+            print(f"Error creating wallet: {e}")
+            return None   
+        print("User added successfully")     
+        return user
+    except ClubError as e:
+        print (f"Error:{e}")
+        return None
+    
 # نمایش همه کاربران
 def view_users(current_role):    
     if current_role.lower() not in ALLOWED_ROLES:
@@ -122,7 +146,7 @@ def edit_user(current_role):
             return 
         new_name = input(f"New name ({user.name}): ").strip()
         new_email = input(f"New email ({user.email}): ").strip()
-        new_pass = input(f"New password ({user.password}): ").strip()
+        new_pass = input(f"New password : ").strip()
         activity = "active" if user.is_active else "inactive"
         print(f"current activity is: {activity} ")
         new_activity = input("Change activity? (Y/N)").strip().lower()
@@ -157,7 +181,7 @@ def edit_user(current_role):
 def generate_hall_id():
     halls = SalonsRepository.all()
     if halls:
-        id_ = max(h.id for h in halls) + 1
+        id_ = max(int(h.id) for h in halls) + 1
     else:
         id_ = 1
     return id_
@@ -281,7 +305,7 @@ def view_class(current_role):
 def generate_class_id():
     classes = KelasRepository.all()
     if classes:
-        id_ = max(c.id for c in classes) + 1
+        id_ = max(int(c.id) for c in classes) + 1
     else:
         id_ = 1
     return id_
@@ -528,13 +552,13 @@ def change_activity_class(current_role):
                 do_ = input("class is active. Deactivate?(Y/N)").strip()
                 if do_.lower()=="y":
                     KelasRepository.deactivate(class_.id)
-                    print(f"class '{class_.name}' deactivated.")
+                    print(f"class '{class_.title}' deactivated.")
                     return
             else:
                 do_ = input("class is not active. Activate?(Y/N)").strip()
                 if do_.lower()=="y":
                     KelasRepository.activate(class_.id)
-                    print(f"class '{class_.name}' activated.")
+                    print(f"class '{class_.title}' activated.")
                     return
     except ClubError as e:
         print(f"Error:, {e}")

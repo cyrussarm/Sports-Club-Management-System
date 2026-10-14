@@ -1,8 +1,8 @@
 from core.models import Salon
-from Repositories.BaseRepository import BaseRepository
+from Repositories.base_repository import base_repository
 
-class SalonsRepository(BaseRepository):
-    file_name = "Salon.json"
+class SalonsRepository(base_repository):
+    file_name = "salons.json"
     model = Salon
 
     @classmethod

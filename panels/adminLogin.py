@@ -1,33 +1,43 @@
-from services.adminServices import *
+from services.adminServices import (
+    add_user, view_users, change_activity_user, edit_user,
+    add_hall, view_hall, change_activity_hall,
+    view_class, add_class, edit_class, change_activity_class,
+)
+from services.coach_services import view_coach_class, manage_exercise_plans
 from services.reports import show_reports, export_people_txt
+from services.member_services import wallet_menu, view_profile_and_subscription,view_available_classes, view_my_exercise_plan
+from Repositories.users_repository import UserRepository
+from core.exceptions import ClubError
 
-# بررسی لاگین ادمین
-def admin_login():        
-    # ذخیره همه کاربران موجود در فایل users.json به صورت لیستی از آبجکتها
+# بررسی لاگین 
+def login(role_):    
+    if role_ not in ("admin", "coach", "member"):
+        print(f"Unknown role: {role_}")
+        return None
     try: # اگر در خواندن اطلاعات کاربران از دیتابیس (همان فایل) خطایی رخ ندهد
         all_users = UserRepository.all()
     except ClubError as e:
         print(f"Error: {e}")
-        return None
+        return None    
     while True:
         # آیا بین کاربرها ادمین با این مشخصات هست یا نه؟
         # فرض : ادمین قبل از اجرای کد رجیستر کرده و اطلاعاتش در فایل یوزرز هست
-        username = input("Enter admin username: ").strip()
-        password = input("Enter admin password: ").strip()
+        username = input(f"Enter {role_} username: ").strip()
+        password = input(f"Enter {role_} password: ").strip()
         for user in all_users:  
             if (user.username == username and
                 user.password == password and
-                user.role == "admin"):
+                user.role == role_):
                 if not user.is_active:
                     print("This account is inactive.")
                     return None
                 return user
         # اگر ورود موفق نبود امکان تکرار مجدد وجود داشته باشد        
-        choice = input("Invalid admin credentials. Try again? (y/n): ").strip().lower()
+        choice = input(f"Invalid {role_} login. Try again? (y/n): ").strip().lower()
         if choice != "y":
             return None 
-
-def admin_panel():
+    
+def admin_panel(username):
     while True:
         choice = input(
             "1-add user\n"
@@ -94,5 +104,46 @@ def admin_panel():
         elif choice == "14":
             return
         else:
-            print("invalid choice")      
+            print("invalid choice")    
+
+def coach_panel(username):
+    while True:
+        choice = input(
+            "1-show my classes\n"
+            "2-manage exercise plans\n"
+            "3-log out\n"
+        )  
+
+        if choice == "1":  
+            view_coach_class(username)
+        elif choice == "2":
+            manage_exercise_plans(username)
+        elif choice == "3":
+            return
+        else:
+            print("invalid choice")  
+
+def member_panel(member_username):
+    while True:
+        choice = input(
+            "1-profile & subscription\n"
+            "2-wallet\n"
+            "3-classes\n"
+            "4-exercise plan\n"
+            "5-log out\n"
+            "Select: "
+        ).strip()
+
+        if choice == "1":
+            view_profile_and_subscription(member_username)
+        elif choice == "2":
+            wallet_menu(member_username)
+        elif choice == "3":
+            view_available_classes(member_username)
+        elif choice == "4":
+            view_my_exercise_plan(member_username)
+        elif choice == "5":
+            return
+        else:
+            print("Invalid choice.")
 

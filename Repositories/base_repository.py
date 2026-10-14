@@ -1,6 +1,6 @@
 from core.storage import load_data, save_data
 
-class BaseRepository:
+class base_repository:
     file_name = None  
     model = None  
     
@@ -74,6 +74,16 @@ class BaseRepository:
                 cls.save_all(objects)
                 return True
         return False
+
+    # حذف یک شیء
+    @classmethod
+    def delete(cls, id_):
+        objects = cls.all()
+        filtered = [obj for obj in objects if str(obj.id) != str(id_)]
+        if len(filtered) == len(objects):
+            return False
+        cls.save_all(filtered)
+        return True
 
    
         

@@ -1,0 +1,1 @@
+Internal Transaction ID: BNK-145071 | User: kobraf | Plan: Wallet charging | Amount: 100.0 | Start Date: 2026-10-13T17:36:28.972078 | End Date: 2026-10-13T17:36:28.972078 | Status: success
