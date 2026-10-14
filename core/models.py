@@ -28,7 +28,7 @@ class Users:
         d["email"] = self.email
         d["role"] = self.role
         d["is_active"] = self.is_active
-        s["Wallet balance"] = self.wallet_balance
+        d["wallet_balance"] = self.wallet_balance
         return d
 
     @classmethod
@@ -36,7 +36,8 @@ class Users:
         cls._ALLOW_INIT = True
         try:
             return cls(id_=d["id"], name=d["name"], username=d["username"], password=d["password"],
-                       email=d["email"], role=d["role"], is_active=d.get("is_active", True), wallet_balance==d["Wallet balance"])
+                       email=d["email"], role=d["role"], is_active=d.get("is_active", True), 
+                       wallet_balance=d.get("wallet_balance", 0.0))
         finally:
             cls._ALLOW_INIT = False
        
@@ -185,21 +186,17 @@ class Subscription:
 #--------------------------------------------
 # کلاس تراکنش
 #-------------------------------------------
-#--------------------------------------------
-# کلاس تراکنش
-#-------------------------------------------
 class Transaction:
     _ALLOW_INIT = False
-    def __init__(self, transaction_id, user_id, amount, subscription_name, duration_mounths, status):
+
+    def __init__(self, transaction_id, user_id, amount, subscription_name, duration_months, status):
         if not Transaction._ALLOW_INIT:
-            raise RuntimeError(
-                " instance creating directly is not allowed. "
-            )
-        self.id = id_
+            raise RuntimeError("instance creating directly is not allowed.")
+        self.id = transaction_id             
         self.user_id = user_id
         self.amount = amount
         self.subscription_name = subscription_name
-        self.duration_months = duration_months
+        self.duration_months = duration_months   
         self.start_date = datetime.now()
         self.end_date = self._calculate_end_date(self.start_date, duration_months)
         self.status = status
@@ -213,7 +210,6 @@ class Transaction:
             if new_month == 0:
                 new_month = 12
                 new_year -= 1
-
         new_day = start.day
         return start.replace(year=new_year, month=new_month, day=new_day)
 
@@ -233,10 +229,14 @@ class Transaction:
     def from_dict(cls, d):
         cls._ALLOW_INIT = True
         try:
-            obj = cls(id_=d["id"], user_id=d["user_id"],
-                      amount=d["amount"], subscription_name=d["subscription_name"],
-                      duration_months=d["duration_months"],
-                      status=d.get("status", "موفق"))
+            obj = cls(
+                transaction_id=d["id"],             
+                user_id=d["user_id"],
+                amount=d["amount"],
+                subscription_name=d["subscription_name"],
+                duration_months=d["duration_months"],
+                status=d.get("status", "success")
+            )
             obj.start_date = datetime.fromisoformat(d["start_date"])
             obj.end_date = datetime.fromisoformat(d["end_date"])
             return obj

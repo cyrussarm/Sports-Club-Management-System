@@ -12,23 +12,3 @@
     }
 ]
 
-[
-    {
-        "id" : 1,
-        "name" : "one mounth subscription",
-        "duration_mounths" : 1,
-        "price" : 300000
-    }
-    {
-        "id" : 2,
-        "name" : "three mounths subsciption",
-        "duration_mounths" : 3,
-        "price" : 800000
-    }
-    {
-        "id" : 3,
-        "name" : "six mounths subscription",
-        "duration_mounths" : 6,
-        "price" : 1500000
-    }
-]

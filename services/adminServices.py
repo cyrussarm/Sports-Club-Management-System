@@ -6,6 +6,8 @@ from Repositories.users_repository import UserRepository
 from Repositories.classes_repository import KelasRepository
 from Repositories.halls_repository import SalonsRepository
 from Repositories.wallet_repository import WalletRepository
+from Repositories.subscriptions_repository import Subs_repository
+from Repositories.transactions_repository import TransactionRepository
 from core.models import Wallet
 from core.exceptions import ClubError
 from services.validation import validate_user_registration
@@ -563,25 +565,25 @@ def change_activity_class(current_role):
     except ClubError as e:
         print(f"Error:, {e}")
         return
-def get_all_members_subscriptions():
-    #مشاهده وضعیت اشتراک همه اعضا
-    return SubscriptionsRepository.get_all()
+# def get_all_members_subscriptions():
+#     #مشاهده وضعیت اشتراک همه اعضا
+#     return SubscriptionsRepository.get_all()
 
-def get_all_transactions():
-    #دریافت کل تراکنش ها و پرداخت ها
-    return TransactionRepository.get_all()
+# def get_all_transactions():
+#     #دریافت کل تراکنش ها و پرداخت ها
+#     return TransactionRepository.get_all()
 
-def purchase_subscription_with_wallet(username, subscription_type, amount):
-    # کنترل موجودی کیف پول و اگر اوکی بود خرید اشتراک
-    wallet_balance = WalletServices.get_balance(username)
+# def purchase_subscription_with_wallet(username, subscription_type, amount):
+#     # کنترل موجودی کیف پول و اگر اوکی بود خرید اشتراک
+#     wallet_balance = WalletServices.get_balance(username)
     
-    if wallet_balance < amount:
-        raise ValueError("The money in your wallet isn't enough, please top up")
+#     if wallet_balance < amount:
+#         raise ValueError("The money in your wallet isn't enough, please top up")
     
-    # ثبت تراکنش
-    WalletServices.withdraw(username, amount)
-    # ثبت اشتراک
-    return True
+#     # ثبت تراکنش
+#     WalletServices.withdraw(username, amount)
+#     # ثبت اشتراک
+#     return True
 
 
 
@@ -592,7 +594,7 @@ def view_members_subscriptions(current_role):
         return
     
     try:
-        subscriptions = SubsRepository.get_all()
+        subscriptions = Subs_repository.all()
         if not subscriptions:
             print("No subscriptions found")
             return
@@ -611,7 +613,7 @@ def view_all_financial_transactions(current_role):
         return
         
     try:
-        transactions = TransactionRepository.all_transactions() 
+        transactions = TransactionRepository.all() 
         if not transactions:
             print("There is no transaction")
             return

@@ -37,7 +37,7 @@ def show_reports():
         sub_type = s.subscription_type
         if sub_type not in revenue_by_type:
             revenue_by_type[sub_type] = 0
-        revenue_by_type[sub_type] += s["amount"]
+        revenue_by_type[sub_type] += s.amount
 
     print("----- Revenue by subscription -----")
     if not revenue_by_type:

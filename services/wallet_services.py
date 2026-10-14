@@ -1,7 +1,7 @@
 from datetime import datetime
 import random
 from core.models import Transaction
-from core.bank import API
+from Bank import API
 from Repositories.wallet_repository import WalletRepository
 from Repositories.transactions_repository import TransactionRepository
 from core.exceptions import ClubError
