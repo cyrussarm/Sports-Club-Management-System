@@ -189,13 +189,12 @@ class Subscription:
 class Transaction:
     _ALLOW_INIT = False
 
-    def __init__(self, transaction_id, user_id, amount, subscription_name, duration_months, status):
+    def __init__(self, transaction_id, user_id, amount, duration_months, status):
         if not Transaction._ALLOW_INIT:
             raise RuntimeError("instance creating directly is not allowed.")
         self.id = transaction_id             
         self.user_id = user_id
-        self.amount = amount
-        self.subscription_name = subscription_name
+        self.amount = amount       
         self.duration_months = duration_months   
         self.start_date = datetime.now()
         self.end_date = self._calculate_end_date(self.start_date, duration_months)
@@ -217,8 +216,7 @@ class Transaction:
         d = {}
         d["id"] = self.id
         d["user_id"] = self.user_id
-        d["amount"] = self.amount
-        d["subscription_name"] = self.subscription_name
+        d["amount"] = self.amount        
         d["duration_months"] = self.duration_months
         d["start_date"] = self.start_date.isoformat()
         d["end_date"] = self.end_date.isoformat()
@@ -232,8 +230,7 @@ class Transaction:
             obj = cls(
                 transaction_id=d["id"],             
                 user_id=d["user_id"],
-                amount=d["amount"],
-                subscription_name=d["subscription_name"],
+                amount=d["amount"],                
                 duration_months=d["duration_months"],
                 status=d.get("status", "success")
             )

@@ -1,20 +1,20 @@
 [
     {
-        "id" : 1,
-        "name" : "one mounth subscription",
-        "duration_mounths" : 1,
-        "price" : 300000
+        "id": 1,
+        "name": "1-month",
+        "duration_months": 1,
+        "price": 100000
     },
     {
-        "id" : 2,
-        "name" : "three mounths subsciption",
-        "duration_mounths" : 3,
-        "price" : 800000
+        "id": 2,
+        "name": "3-month",
+        "duration_months": 3,
+        "price": 300000
     },
     {
-        "id" : 3,
-        "name" : "six mounths subscription",
-        "duration_mounths" : 6,
-        "price" : 1500000
+        "id": 3,
+        "name": "6-month",
+        "duration_months": 6,
+        "price": 600000
     }
 ]

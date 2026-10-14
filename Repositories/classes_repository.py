@@ -24,6 +24,9 @@ class KelasRepository(base_repository):
     def list_active_classes_by_coach(cls, username):
         return [obj_ for obj_ in cls.all() if obj_.coach_username == username and obj_.is_active]
 
+    @classmethod
+    def list_active_classes_a_member(cls, username):
+        return [obj_ for obj_ in cls.all() if username in obj_.enrolled and obj_.is_active]
     # @classmethod
     # def list_my_students(cls,username):
     #     my_classes = cls.list_active_classes_by_coach(username)

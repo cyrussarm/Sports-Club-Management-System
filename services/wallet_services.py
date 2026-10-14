@@ -10,6 +10,8 @@ class WalletService:
     
     @staticmethod
     def charge_wallet(member, amount, card_details):
+        if amount <= 0: 
+            raise ValueError("Charge amount must be positive")
         
         # validation_result = API.validate(
         #     card_details.get("card_number"),

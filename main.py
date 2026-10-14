@@ -1,5 +1,5 @@
 
-from panels.adminLogin import login, admin_panel, coach_panel
+from panels.menus import login, admin_panel, coach_panel, member_panel
 
 def main():
 
@@ -19,20 +19,20 @@ def main():
                 admin_panel(admin.username)
             else:
                 print("Invalid admin credentials.")
+
         elif choice == "2":
             coach = login("coach")
             if coach:
                 coach_panel(coach.username)
             else:
                 print("Invalid coach")
-            # coach_username = input("Enter coach username: ").strip()
-            # coach_password = input("Enter coach password: ").strip()
-            # print("Coach login functionality is not implemented yet.")
-        elif choice == "3":
-            pass
-            # member_username = input("Enter member username: ").strip()
-            # member_password = input("Enter member password: ").strip()
-            # print("Member login functionality is not implemented yet.")
+          
+        elif choice == "3":            
+            member = login("member")
+            if member:
+                member_panel(member.username)
+            else:
+                print("Invalid member")
         elif choice == "4" :
             print("Exiting the program.")
             break

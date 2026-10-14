@@ -8,6 +8,10 @@ from Repositories.halls_repository import SalonsRepository
 from Repositories.wallet_repository import WalletRepository
 from Repositories.subscriptions_repository import Subs_repository
 from Repositories.transactions_repository import TransactionRepository
+from Repositories.subscriptions_repository import Subs_repository
+from Repositories.transactions_repository import TransactionRepository
+from core.models import Subscription, Transaction
+from datetime import datetime
 from core.models import Wallet
 from core.exceptions import ClubError
 from services.validation import validate_user_registration
@@ -565,6 +569,80 @@ def change_activity_class(current_role):
     except ClubError as e:
         print(f"Error:, {e}")
         return
+
+# ویرایش سالن
+def edit_hall(current_role):
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is authorized to do this.")
+        return
+
+    hall_name = input("Enter hall name to edit: ").strip()
+    try:
+        hall = SalonsRepository.find_hall_by_name(hall_name)
+    except ClubError as e:
+        print(f"Error: {e}")
+        return
+
+    if hall is None:
+        print(f"No hall found with name: {hall_name}")
+        return
+
+    print(f"Editing hall: {hall.name}")
+    print("Press Enter to keep current value.")
+
+    new_name = input(f"New name ({hall.name}): ").strip()
+    if not new_name:
+        new_name = hall.name
+    else:       
+        try:
+            existing = SalonsRepository.find_hall_by_name(new_name)
+        except ClubError as e:
+            print(f"Error: {e}")
+            return
+        if existing is not None and existing.id != hall.id:
+            print(f"Error: another hall with name '{new_name}' already exists.")
+            return
+    
+    new_capacity = hall.capacity
+    cap_input = input(f"New capacity ({hall.capacity}): ").strip()
+    if cap_input:
+        try:
+            new_capacity = int(cap_input)
+        except ValueError:
+            print("Capacity must be a number.")
+            return
+        if new_capacity <= 0:
+            print("Capacity must be greater than zero.")
+            return
+    
+    current_equip = ", ".join(hall.equipments) if hall.equipments else "(none)"
+    print(f"Current equipments: {current_equip}")
+    equip_input = input("New equipments (comma separated, Enter to keep): ").strip()
+    if equip_input:
+        new_equipments = [e.strip() for e in equip_input.split(",") if e.strip()]
+    else:
+        new_equipments = hall.equipments
+
+    new_hall = Salon.from_dict({
+        "id": hall.id,
+        "name": new_name,
+        "capacity": new_capacity,
+        "equipments": new_equipments,
+        "is_active": hall.is_active,
+    })
+
+    try:
+        if SalonsRepository.update(new_hall):
+            print(f"  Hall '{hall.name}' updated successfully.")
+            print(f" Name: {new_hall.name}")
+            print(f" apacity: {new_hall.capacity}")
+            if new_hall.equipments:
+                print(f" Equipments: {', '.join(new_hall.equipments)}")
+        else:
+            print("Failed to update hall.")
+    except ClubError as e:
+        print(f"Error: {e}")
+
 # def get_all_members_subscriptions():
 #     #مشاهده وضعیت اشتراک همه اعضا
 #     return SubscriptionsRepository.get_all()
@@ -622,5 +700,186 @@ def view_all_financial_transactions(current_role):
         for t in transactions:
             print(f"id : {t.transaction_id} | user's id : {t.user_id} | amount :: {t.amount} | subscription's name : {t.subscription_name} | duration mounths : {t.duration_mounths} | status: {t.status}")
         print("------------------------------------------")
+    except ClubError as e:
+        print(f"Error: {e}")
+
+
+# ---------------------------------------------------------------
+# مدیریت اشتراک‌ها
+# ---------------------------------------------------------------
+
+# لیست پلن های اشتراک
+# سه پلن اشتراک 1 ماه، 3 ماه و 6 ماه در فایل ذخیره شده اند
+def load_subscription_plans():    
+    from core.storage import load_data
+    return load_data("subscription_plans.json")
+
+# تولید آی دی یکتا برای هر اشتراک
+def generate_subscription_id():    
+    eshtarak_id = 1
+    eshtarakha = Subs_repository.all()
+    if eshtarakha:
+        eshtarak_id =   max(int(eshtarak.id) for eshtarak in eshtarakha) + 1
+    return eshtarak_id
+
+# ایجاد اشتراک جدید
+def register_subscription_for_member(current_role):   
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is authorized to do this.")
+        return
+    
+    username = input("Enter member username (case-sensitive ast): ").strip()
+    member = UserRepository.find_by_username(username)
+    if member is None:
+        print(f"No user found with username: {username}")
+        return
+    if member.role != "member":
+        print(f"{username} is not a member (role: {member.role}).")
+        return
+    if not member.is_active:
+        print(f"{username} is inactive.")
+        return
+   
+    plans = load_subscription_plans()
+    if not plans:
+        print("No subscription plans available.")
+        return
+
+    print("\n===== Subscription Plans =====")
+    for p in plans:
+        print(f"  {p['id']}. {p['name']} | "
+              f"{p['duration_months']} months | "
+              f"price: {p['price']}")
+
+    #  انتخاب پلن
+    while True:
+        try:
+            plan_id = int(input("Select plan id (or 0 to back): ").strip())
+            if plan_id == 0:
+                return
+            selected_plan = None
+            for plan in plans:
+                if plan["id"]==plan_id:
+                    selected_plan = plan
+                    break              
+
+            if selected_plan is None:
+                print("Invalid plan id.")
+                continue
+            break
+        except ValueError:
+            print("Plan id must be a number.")
+
+    now = datetime.now()    
+    new_month = now.month + selected_plan["duration_months"]
+    new_year = now.year + (new_month - 1) // 12
+    new_month = (new_month - 1) % 12 + 1
+    end_date = now.replace(year=new_year, month=new_month)
+
+    # تولید کد اشتراک  
+    # ممکنه احتمال تکراری شدنش باشه 
+    # البته id کاربر همیشه یونیکه  
+    subscription_code= "SUB-" + f'{member.id}-{member.username}'
+
+    dict_ = {"id": generate_subscription_id(),"member_username": member.username,
+        "subscription_type": selected_plan["name"], "amount": selected_plan["price"],
+        "payment_date": now.strftime("%Y-%m-%d"), "start_date": now.strftime("%Y-%m-%d"),
+        "end_date": end_date.strftime("%Y-%m-%d"), "subscription_code": subscription_code,
+        "subscription_state": "active"}
+    
+    subscription = Subscription.from_dict(dict_)
+    
+    try:
+        Subs_repository.add(subscription)
+        print(f"\n Eshterak Sabt Shod for {member.username}")
+        print(f"   Type: {subscription.subscription_type}")
+        print(f"   Amount: {subscription.amount}")
+        print(f"   Start: {subscription.start_date}")
+        print(f"   End: {subscription.end_date}")
+        print(f"   subscription_code: {subscription.subscription_code}")
+    except ClubError as e:
+        print(f"Error: {e}")
+        return
+    
+    try:
+        transaction = Transaction.from_dict({
+            "id": "ADM-" + f'{member.id}-{member.username}',
+            "user_id": member.username,
+            "amount": selected_plan["price"],
+            "subscription_name": selected_plan["name"],
+            "duration_months": selected_plan["duration_months"],
+            "start_date": now.isoformat(),
+            "end_date": end_date.isoformat(),
+            "status": "success"
+        })
+        TransactionRepository.add(transaction)
+    except ClubError as e:
+        print(f"Warning: transaction log failed: {e}")
+
+
+def view_all_payments(current_role):    
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is authorized to do this.")
+        return
+
+    try:
+        transactions = TransactionRepository.all()
+        if not transactions:
+            print("No transactions found.")
+            return
+
+        print("\n===== All Payments =====")
+        for trans in transactions:
+           
+            user = UserRepository.find_by_username(trans.user_id)
+            if user:
+                print(f"id = {trans.id}  |")
+                print(f"name = {user.name}  |") 
+                print(f"amount = {trans.amount} \n") 
+                print(f"date = {trans.start_date.strftime('%Y-%m-%d')}  |") 
+                print(f"status = {trans.status}  |")                    
+    except ClubError as e:
+        print(f"Error: {e}")
+
+
+def view_subscriptions_status(current_role):    
+    if current_role.lower() not in ALLOWED_ROLES:
+        print("Only the admin is authorized to do this.")
+        return
+
+    try:
+        members = UserRepository.list_of_given_role("member")
+        if not members:
+            print("No members found.")
+            return
+
+        all_subs = Subs_repository.all()
+        now = datetime.now()
+
+        print("\n===== Subscriptions Status =====")
+        for member in members:
+            member_subs = [s for s in all_subs
+                           if s.member_username == member.username
+                           and s.subscription_state == "active"]
+
+            if not member_subs:
+                print(f"{member.name} ({member.username}): no-subscription")
+                continue
+
+            latest = member_subs[-1]
+            # بررسی انقضا
+            try:
+                end_date = datetime.strptime(latest.end_date, "%Y-%m-%d")
+                if end_date < now:
+                    state = "expired"
+                else:
+                    state = "active"
+            except ValueError:
+                state = latest.subscription_state
+
+            print(f"{member.name} ({member.username}): "
+                  f"{latest.subscription_type} | "
+                  f"until {latest.end_date} | "
+                  f"{state}")
     except ClubError as e:
         print(f"Error: {e}")

@@ -21,11 +21,10 @@
     },
     {
         "id": 3,
-        "name": "salon-03",
-        "capacity": 12,
+        "name": "salon-05",
+        "capacity": 10,
         "equipments": [
-            "s",
-            "f"
+            "s"
         ],
         "is_active": true
     },

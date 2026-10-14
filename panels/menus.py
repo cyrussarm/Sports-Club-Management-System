@@ -1,8 +1,14 @@
 from services.adminServices import (
     add_user, view_users, change_activity_user, edit_user,
-    add_hall, view_hall, change_activity_hall,
-    view_class, add_class, edit_class, change_activity_class,
+    add_hall, view_hall, change_activity_hall, edit_hall,
+    view_class, add_class, edit_class, change_activity_class, 
+    register_subscription_for_member,  view_all_payments,                     
+    view_subscriptions_status
 )
+
+from services.member_services import(wallet_menu, view_profile_and_subscription,
+    view_available_classes, view_my_exercise_plan, sabtenam_class,  
+    cancel_sabtenam_class, view_my_enrollments)
 from services.coach_services import view_coach_class, manage_exercise_plans
 from services.reports import show_reports, export_people_txt
 from services.member_services import wallet_menu, view_profile_and_subscription,view_available_classes, view_my_exercise_plan
@@ -53,8 +59,13 @@ def admin_panel(username):
             "11-activate/deactivate class\n"
             "12-reports\n"
             "13-export people to txt\n"
-            "14-log out\n"
-        )
+            "14-register subscription\n"         
+            "15-view all payments\n"             
+            "16-view subscriptions status\n" 
+            "17-edit hall\n"    
+            "18-log out\n"                       
+        ) 
+        
         if choice == "1":   # add user
             new_user = add_user("admin")
             if new_user is not None:
@@ -96,12 +107,37 @@ def admin_panel(username):
                 show_reports()
             except ClubError as e:
                 print("Error:", e)
+
         elif choice == "13":
             try:
                 export_people_txt()
             except ClubError as e:
                 print("Error:", e)
+
         elif choice == "14":
+            try:
+                register_subscription_for_member("admin")
+            except ClubError as e:
+                print("Error:", e)
+
+        elif choice == "15":
+            try:
+                view_all_payments("admin")
+            except ClubError as e:
+                print("Error:", e)
+        elif choice == "16":
+            try:
+                view_subscriptions_status("admin")
+            except ClubError as e:
+                print("Error:", e)
+
+        elif choice == "17":
+            try:
+                edit_hall("admin")
+            except ClubError as e:
+                print("Error:", e)
+
+        elif choice == "18":
             return
         else:
             print("invalid choice")    
@@ -126,13 +162,15 @@ def coach_panel(username):
 def member_panel(member_username):
     while True:
         choice = input(
-            "1-profile & subscription\n"
-            "2-wallet\n"
-            "3-classes\n"
-            "4-exercise plan\n"
-            "5-log out\n"
-            "Select: "
-        ).strip()
+        "1-profile & subscription\n"   # مشاهده پروفایل و وضعیت اشتراک
+        "2-wallet\n"                    # (موجودی/شارژ/مشاهده تراکنش ها/ پرداخت  و ایجاد یا تمدید اشتراک) کیف پول 
+        "3-classes\n"                   # مشاهده کلاسها
+        "4-enroll in class\n"            # ثبت نام در کلاس
+        "5-my enrollments\n"              # مشاهده سابقه ثبت نام ها
+        "6-cancel enrollment\n"           # کنسل کردن یک کلاس
+        "7-exercise plan\n"             # مشاهده برنامه تمرین
+        "8-log out\n"
+            )
 
         if choice == "1":
             view_profile_and_subscription(member_username)
@@ -141,9 +179,17 @@ def member_panel(member_username):
         elif choice == "3":
             view_available_classes(member_username)
         elif choice == "4":
-            view_my_exercise_plan(member_username)
+            sabtenam_class(member_username)
         elif choice == "5":
+            view_my_enrollments(member_username)
+        elif choice == "6":
+            cancel_sabtenam_class(member_username)
+        elif choice == "7":
+            view_my_exercise_plan(member_username)
+        elif choice == "8":
             return
         else:
             print("Invalid choice.")
+
+          
 
