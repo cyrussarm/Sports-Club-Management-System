@@ -17,9 +17,9 @@ def view_coach_class(coach_username):
             else:
                 status = "inactive"
             
-            print(f"class id: {c.id} | class name: {c.title} | sport type: {c.sport_type} | coach: {c.coach_name} | "
-              f" coach_username: {c.coach_username} | hall: {c.hall_name} | "
-              f"day:{c.day} | time: {c.time} | capacity: {c.capacity} | "
+            print(f"class id: {c.id} | class name: {c.title} | sport type: {c.sport_type} | coach: {c.coach_name}\n" \
+              f" coach_username: {c.coach_username} | hall: {c.hall_name}\n" \
+              f"day:{c.day} | time: {c.time} | capacity: {c.capacity}\n" \
               f" remaining capacity: {c.remaining_capacity()} | state: {status}\n")
     except ClubError as e: # فایل خالی یا خطا
         print (f"Error: {e}")
@@ -100,8 +100,8 @@ def edit_exercise(exercises):
         
         while True:
             temp = input("Choose the option you want to change:\n" \
-                         "1. name | 2. sets | 3. tekrars\n" \
-                         "4. rest time | 5. description\n")
+                         "1- name | 2- sets | 3- tekrars\n" \
+                         "4- rest time | 5- description\n")
             
             if temp == '1':
                 target_exercise['name'] = input('Enter the new name: ')
@@ -189,7 +189,7 @@ def add_exercise_plan(coach_username, SportClass, member_username):
     exercises = []
 
     while True:
-        a = input('Choose an option:\n 1. Add an exercise\n 2. Edit an existing exercise\n 3. Delete an exercise\n')
+        a = input('Choose an option:\n 1- Add an exercise\n 2- Edit an existing exercise\n 3- Delete an exercise\n 4- Back')
 
         if a == '1':
             add_exercise(exercises)
@@ -216,6 +216,8 @@ def add_exercise_plan(coach_username, SportClass, member_username):
                 else:
                     print('Exercise not found.')
                     continue
+        elif a == '4':
+            return None
         else:
             print('Invalid input.')
             continue
@@ -232,15 +234,17 @@ def add_exercise_plan(coach_username, SportClass, member_username):
 def edit_exercise_plan(plan):
     plan = plan.to_dict()
     exercises = plan['exercises']
-    print(f"The selected plan:\n \
-          Plan ID: {plan['id']} | Class: {plan['class_title']}\n \
-            Member Username: {plan['member_username']}\n \
-            Exercises: {plan['exercises']}")
+
+    print(f"The selected plan:\n" \
+          f"Plan ID: {plan['id']} | Class: {plan['class_title']}\n" \
+          f"Member Username: {plan['member_username']}\n" \
+          f"Exercises: {plan['exercises']}")
+    
     while True:
-        a = input('Choose an option:\n 1. Edit exercises\n 2. Go back\n')
+        a = input('Choose an option:\n 1- Edit exercises\n 2- Go back\n')
         if a == '1':
             while True:
-                temp = input('Choose an option:\n 1. Add an exercise\n 2. Edit an exercise\n 3. Delete an exercise\n 4. Go back\n')
+                temp = input('Choose an option:\n 1- Add an exercise\n 2- Edit an exercise\n 3- Delete an exercise\n 4- Back\n')
                 if temp == '1':
                     add_exercise(exercises)
                 elif temp == '2':
@@ -324,7 +328,7 @@ def manage_exercise_plans(coach_username):
 
     #منو بعد از انتخاب کلاس و ممبر
     while True:
-        action = input('Choose an option:\n 1. Add an excercise plan\n 2. Edit an excercise plan\n 3.Return to main menu\n')
+        action = input('Choose an option:\n 1- Add an excercise plan\n 2- Edit an excercise plan\n 3- Return to main menu\n')
 
         if action == '1':
             if userplan == None:
