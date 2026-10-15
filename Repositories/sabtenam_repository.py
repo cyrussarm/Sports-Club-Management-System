@@ -1,6 +1,5 @@
 from core.models import Enrollment
 from Repositories.base_repository import base_repository
-from Repositories.classes_repository import KelasRepository
 
 class SabtenamRepository(base_repository):
     file_name = "sabtenam.json"

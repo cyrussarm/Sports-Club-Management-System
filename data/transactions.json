@@ -6,7 +6,8 @@
         "duration_months": 0,
         "start_date": "2026-10-13T14:30:00.123456",
         "end_date": "2026-10-13T14:30:00.123456",
-        "status": "success"
+        "status": "success",
+        "subscription_name": "-"
     },
     {
         "id": "BNK-145071",
@@ -15,7 +16,8 @@
         "duration_months": 0,
         "start_date": "2026-10-13T17:36:28.972078",
         "end_date": "2026-10-13T17:36:28.972078",
-        "status": "success"
+        "status": "success",
+        "subscription_name": "-"
     },
     {
         "id": "ADM-4-kobraf",
@@ -24,6 +26,17 @@
         "duration_months": 1,
         "start_date": "2026-10-14T13:11:19.996499",
         "end_date": "2026-11-14T13:11:19.996499",
-        "status": "success"
+        "status": "success",
+        "subscription_name": "-"
+    },
+    {
+        "id": "INT-TRX-91802626",
+        "user_id": "kobraf",
+        "amount": 100000,
+        "duration_months": 1,
+        "start_date": "2026-10-15T00:00:00",
+        "end_date": "2026-11-15T00:00:00",
+        "status": "success",
+        "subscription_name": "1-month"
     }
 ]

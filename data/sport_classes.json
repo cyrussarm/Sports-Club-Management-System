@@ -37,7 +37,9 @@
         "day": "12",
         "time": "45",
         "capacity": 13,
-        "enrolled": [],
+        "enrolled": [
+            "kobraf"
+        ],
         "is_active": true
     },
     {

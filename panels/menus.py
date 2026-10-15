@@ -64,7 +64,7 @@ def admin_panel(username):
             "16-view subscriptions status\n" 
             "17-edit hall\n"    
             "18-log out\n"                       
-        ) 
+        ).strip()
         
         if choice == "1":   # add user
             new_user = add_user("admin")
@@ -148,7 +148,7 @@ def coach_panel(username):
             "1-show my classes\n"
             "2-manage exercise plans\n"
             "3-log out\n"
-        )  
+        ).strip()
 
         if choice == "1":  
             view_coach_class(username)
@@ -162,15 +162,15 @@ def coach_panel(username):
 def member_panel(member_username):
     while True:
         choice = input(
-        "1-profile & subscription\n"   # مشاهده پروفایل و وضعیت اشتراک
-        "2-wallet\n"                    # (موجودی/شارژ/مشاهده تراکنش ها/ پرداخت  و ایجاد یا تمدید اشتراک) کیف پول 
-        "3-classes\n"                   # مشاهده کلاسها
-        "4-enroll in class\n"            # ثبت نام در کلاس
-        "5-my enrollments\n"              # مشاهده سابقه ثبت نام ها
-        "6-cancel enrollment\n"           # کنسل کردن یک کلاس
-        "7-exercise plan\n"             # مشاهده برنامه تمرین
+        "1-profile & subscription\n"   
+        "2-wallet\n"                  
+        "3-classes\n"                  
+        "4-enroll in class\n"           
+        "5-my enrollments\n"             
+        "6-cancel enrollment\n"           
+        "7-exercise plan\n"            
         "8-log out\n"
-            )
+            ).strip()
 
         if choice == "1":
             view_profile_and_subscription(member_username)

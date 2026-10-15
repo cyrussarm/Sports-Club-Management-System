@@ -9,5 +9,16 @@
         "end_date": "2026-11-14",
         "subscription_code": "SUB-4-kobraf",
         "subscription_state": "active"
+    },
+    {
+        "id": 3,
+        "member_username": "kobraf",
+        "subscription_type": "1-month",
+        "amount": 100000,
+        "payment_date": "2026-10-15",
+        "start_date": "2026-10-15",
+        "end_date": "2026-11-15",
+        "subscription_code": "SUB-kobraf",
+        "subscription_state": "active"
     }
 ]

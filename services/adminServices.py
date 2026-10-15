@@ -221,7 +221,7 @@ def add_hall(current_role):
                 break 
         except ValueError:
             print("Capacity must be a number.")
-    text = input("Equipments (comma separated): ")
+    text = input("Equipments (comma separated): ").strip()
     equipments = [e.strip() for e in text.split(",") if e.strip()] if text else []  
     try:    
         dict_ = {"id": generate_hall_id(),"name": hall_name, "capacity": capacity,"equipments": equipments, "is_active": True}    
