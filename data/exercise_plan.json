@@ -1,18 +1,3 @@
 [
-    {
-        "id": 1,
-        "class_title": "smd",
-        "member_username": "kobraf",
-        "coach_username": "reza_3451&",
-        "exercises": [
-            {
-                "id": 1,
-                "name": "vfg",
-                "sets": 3,
-                "tekrars": 4,
-                "rest_time": "3 min",
-                "description": "-"
-            }
-        ]
-    }
+   
 ]

@@ -36,5 +36,16 @@
             "sd"
         ],
         "is_active": true
+    },
+    {
+        "id": 5,
+        "name": "salon test",
+        "capacity": 5,
+        "equipments": [
+            "divar",
+            "dar",
+            "service"
+        ],
+        "is_active": true
     }
 ]

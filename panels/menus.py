@@ -17,7 +17,7 @@ from core.exceptions import ClubError
 
 # بررسی لاگین 
 def login(role_):    
-    if role_ not in ("admin", "coach", "member"):
+    if role_ not in ["admin", "coach", "member"]:
         print(f"Unknown role: {role_}")
         return None
     try: # اگر در خواندن اطلاعات کاربران از دیتابیس (همان فایل) خطایی رخ ندهد

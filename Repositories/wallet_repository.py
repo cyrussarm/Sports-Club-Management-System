@@ -13,4 +13,4 @@ class WalletRepository(base_repository):
     # یک جنریتور درست میکند و شی های آن را پیمایش میکند تا برسد به شی ای که یوزرنیم ش سازگار باشد
     # اولین عضو را پیدا کرد ریترن میکند اگر پیدا نکرد نان
     def find_by_member(cls, member_username):
-        return next((obj_ for obj_ in cls.all() if obj_.member_username == member_username), None)
+        return next((obj for obj in cls.all() if obj.member_username == member_username), None)

@@ -7,4 +7,4 @@ class exercise_plan_repository(base_repository):
 
     @classmethod
     def find_by_username(cls, username):
-        return [obj_ for obj_ in cls.all() if obj_.member_username == username]
+        return [obj for obj in cls.all() if obj.member_username == username]

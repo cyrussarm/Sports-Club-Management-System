@@ -46,8 +46,8 @@ class base_repository:
     def update(cls,new_obj):
         # جایگزینی شی موجود با شی جدید
         objects = cls.all()
-        for index, obj_ in enumerate(objects):
-            if str(obj_.id) == str(new_obj.id):
+        for index,obj in enumerate(objects):
+            if str(obj.id) == str(new_obj.id):
                 objects[index] = new_obj
                 cls.save_all(objects)
                 return True
@@ -57,9 +57,9 @@ class base_repository:
     @classmethod
     def deactivate(cls,id_):
         objects = cls.all()
-        for obj_ in objects:
-            if str(obj_.id)==str(id_):
-                obj_.is_active = False
+        for obj in objects:
+            if str(obj.id)==str(id_):
+                obj.is_active = False
                 cls.save_all(objects)
                 return True
         return False
@@ -68,9 +68,9 @@ class base_repository:
     @classmethod
     def activate(cls,id_):
         objects = cls.all()
-        for obj_ in objects:
-            if str(obj_.id)==str(id_):
-                obj_.is_active = True
+        for obj in objects:
+            if str(obj.id)==str(id_):
+                obj.is_active = True
                 cls.save_all(objects)
                 return True
         return False

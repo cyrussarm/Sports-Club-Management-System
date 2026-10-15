@@ -46,17 +46,17 @@ class UserRepository(base_repository):
     @classmethod
     def list_active(cls):
         objects = cls.all()
-        return [obj_ for obj_ in objects if obj_.is_active]
+        return [obj for obj in objects if obj.is_active]
 
     @classmethod
     def list_active_with_username_and_role (cls, role_, username):
-        return[obj_ for obj_ in cls.list_active() if obj_.role == role_ and obj_.username==username]
+        return[obj for obj in cls.list_active() if obj.role == role_ and obj.username==username]
 
     # اولین مطابقت یافته شده را برگردان یا None
     @classmethod
     def find_active_with_username_and_role (cls, role_, username):        
-        return next((obj_ for obj_ in cls.list_active() 
-                     if obj_.role == role_ and obj_.username==username),None)
+        return next((obj for obj in cls.list_active() 
+                     if obj.role == role_ and obj.username==username),None)
         
         
          

@@ -7,26 +7,26 @@ class KelasRepository(base_repository):
 
     # افزودن شی جدید
     @classmethod
-    def add(cls, obj):
+    def add(cls, new_obj):
         existing_objects = cls.all()
-        for obj_ in existing_objects:
-            if str(obj_.title) == str(obj.title):
+        for obj in existing_objects:
+            if str(obj.title) == str(new_obj.title):
                 return False
-        existing_objects.append(obj)
+        existing_objects.append(new_obj)
         cls.save_all(existing_objects)
         return True
 
     @classmethod
     def find_by_title(cls, name):
-        return next((obj_ for obj_ in cls.all() if obj_.title == name),None) 
+        return next((obj for obj in cls.all() if obj.title == name),None) 
 
     @classmethod
     def list_active_classes_by_coach(cls, username):
-        return [obj_ for obj_ in cls.all() if obj_.coach_username == username and obj_.is_active]
+        return [obj for obj in cls.all() if obj.coach_username == username and obj.is_active]
 
     @classmethod
     def list_active_classes_a_member(cls, username):
-        return [obj_ for obj_ in cls.all() if username in obj_.enrolled and obj_.is_active]
+        return [obj for obj in cls.all() if username in obj.enrolled and obj.is_active]
     # @classmethod
     # def list_my_students(cls,username):
     #     my_classes = cls.list_active_classes_by_coach(username)

@@ -1,56 +1,26 @@
 [
     {
         "id": 1,
-        "title": "kelas-shahid-khodadad",
+        "title": "kelas-test",
         "sport_type": "Bodybuilding",
-        "coach_name": "Parvin",
-        "coach_username": "Parvin_66",
-        "hall_name": "salon-02",
+        "coach_name": "رضا",
+        "coach_username": "reza_3451&",
+        "hall_name": "salon-01",
         "day": "Monday",
         "time": "6-8 PM",
-        "capacity": 12,
-        "enrolled": [
-            "reza_3451&"
-        ],
-        "is_active": true
-    },
-    {
-        "id": 2,
-        "title": "sf",
-        "sport_type": "d",
-        "coach_name": "سیروس سرمستی",
-        "coach_username": "\"abutaleb@!\"",
-        "hall_name": "salon-03",
-        "day": "3",
-        "time": "4",
         "capacity": 12,
         "enrolled": [],
         "is_active": true
     },
     {
-        "id": 3,
-        "title": "smd",
-        "sport_type": "asd",
+        "id": 2,
+        "title": "fekhner",
+        "sport_type": "water",
         "coach_name": "رضا",
         "coach_username": "reza_3451&",
-        "hall_name": "salon-03",
-        "day": "12",
-        "time": "45",
-        "capacity": 13,
-        "enrolled": [
-            "kobraf"
-        ],
-        "is_active": true
-    },
-    {
-        "id": 4,
-        "title": "Sirus2",
-        "sport_type": "YugaP",
-        "coach_name": "ابوطالب سقراط زاده",
-        "coach_username": "abutaleb@!",
-        "hall_name": "salon-03",
-        "day": "We",
-        "time": "4",
+        "hall_name": "salon test",
+        "day": "Ture",
+        "time": "2-4 pm",
         "capacity": 12,
         "enrolled": [],
         "is_active": true

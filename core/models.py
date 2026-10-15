@@ -153,7 +153,7 @@ class Subscription:
         self.start_date = start_date
         self.end_date = end_date
         self.subscription_code = subscription_code
-        self.subscription_state = subscription_state  # active/expired/no-subscription
+        self.subscription_state = subscription_state
 
     def to_dict(self):
         d = {}
@@ -253,10 +253,10 @@ class Exercise:
                 " instance creating directly is not allowed. "
             )
         self.id = id_
-        self.name= name     # نام تمرین
-        self.sets = sets    # تعداد ست
-        self.tekrars = tekrars # تعداد تکرار
-        self.rest_time = rest_time # زمان استراحت
+        self.name= name
+        self.sets = sets
+        self.tekrars = tekrars
+        self.rest_time = rest_time
         self.description = description        
 
     def to_dict(self):
@@ -293,10 +293,10 @@ class ExercisePlan:
                 " instance creating directly is not allowed. "
             )
         self.id = id_
-        self.class_title= class_title     # نام کلاس
-        self.member_username = member_username    # یوزر عضو
-        self.coach_username = coach_username #  یوزر مربی         
-        self.exercises = exercises    # لیست تمرین ها (هر تمرین یک شی)    
+        self.class_title= class_title
+        self.member_username = member_username
+        self.coach_username = coach_username
+        self.exercises = exercises
 
     def to_dict(self):
         d={}
@@ -304,17 +304,18 @@ class ExercisePlan:
         d["class_title"] = self.class_title
         d["member_username"] = self.member_username           
         d["coach_username"] = self.coach_username
-        d["exercises"] = self.exercises           
+        d["exercises"] = [e.to_dict() for e in self.exercises]
         return d
 
     @classmethod
     def from_dict(cls,d):
         cls._ALLOW_INIT = True
         try:
+            exercises = [Exercise.from_dict(e) for e in d["exercises"]]
             return cls(id_=d["id"], class_title = d["class_title"],
                         member_username = d["member_username"],
                         coach_username = d["coach_username"],
-                        exercises = d["exercises"]                      
+                        exercises = exercises
                         )  
         finally:
             cls._ALLOW_INIT = False
@@ -383,4 +384,3 @@ class Enrollment:
                        is_active=d.get("is_active", True))
         finally:
             cls._ALLOW_INIT = False
-

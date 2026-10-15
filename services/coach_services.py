@@ -34,7 +34,7 @@ def manage_exercise_plans(coach_username):
         print("no class found")
         return
 
-    class_ids = [obj_.id for obj_ in classes]
+    class_ids = [obj.id for obj in classes]
 
     
     while True:

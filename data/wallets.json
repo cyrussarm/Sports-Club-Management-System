@@ -2,6 +2,11 @@
     {
         "id": 1,
         "member_username": "kobraf",
-        "balance": 200000
+        "balance": 0.0
+    },
+    {
+        "id": 2,
+        "member_username": "MemberUser",
+        "balance": 0.0
     }
 ]

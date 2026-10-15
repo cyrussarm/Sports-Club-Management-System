@@ -10,6 +10,7 @@ from Repositories.exercise_plan_repository import exercise_plan_repository
 from core.models import Enrollment, Subscription, Transaction
 from datetime import date, datetime
 from core.storage import load_data
+from core.exceptions import ClubError
 import random
 from Repositories import wallet_repository, subscriptions_repository
 
@@ -90,29 +91,24 @@ def view_my_exercise_plan(member_username):
 def check_eshterak(member_username):
     # چک اول: اشتراک دارد یا نه
     eshterakha = Subs_repository.all()
-    selected = None
-    for e in eshterakha:
-        if e.member_username == member_username and e.subscription_state == "active":
-            selected = e
-            break
-
-    if not selected:
-        print("You have no active subscripton")        
-        return False
-    
     f1 = "%Y-%m-%d"
     today = date.today()
-    try:
-        tarikh_eshterak = datetime.strptime(selected.end_date, f1).date()
-    except (ValueError, AttributeError):
-        print("Subscription date format is invalid.\n")
+    found = None
+    for e in eshterakha:
+        if e.member_username == member_username and e.subscription_state == "active":
+            found = e
+            break
+    if found is None:
+        print("You have no active subscription")
         return False
 
-    if tarikh_eshterak >= today:
+    end = datetime.strptime(found.end_date, f1).date()    
+    if end >= today:
         return True
-
-    print("Eshterake shoma mongazi shode ast")
-    return False
+    else:
+        print("Eshterake shoma mongazi shode ast")
+        return False    
+    
 
 # ثبت نام در کلاس
 def sabtenam_class(member_username):
@@ -209,7 +205,7 @@ def cancel_sabtenam_class(member_username):
 
     while True:
         choice = input("Enter the ID class to cancle (or press ENTER to exit): ").strip()
-        if choice == "0":
+        if choice in ["0",""]:
             return
         try:
             choice = int(choice)
@@ -345,18 +341,18 @@ def view_transactions(member_username):
         print(f"{t.id} | {t.amount} | "
               f"{t.start_date.strftime('%Y-%m-%d')} | {t.status}")
 
-def charge_wallet_menu(member_username):    
-    while True:
-        try:
+
+def charge_wallet_menu(member_username): 
+    while True:        
+        try:                                      
             amount = float(input("Enter amount to charge: ").strip())
             if not isinstance(amount, (int, float)) or amount <= 0: 
                 print("Amount must be positive.")           
                 continue
             break
-        except ValueError:
+        except ValueError:                          
             print("Amount must be a number.")
-   
-    
+           
     card_number = input(" Card number: ").strip()
     while True:
         try:

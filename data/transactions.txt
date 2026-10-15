@@ -1,2 +1,0 @@
-Internal Transaction ID: BNK-145071 | User: kobraf | Plan: Wallet charging | Amount: 100.0 | Start Date: 2026-10-13T17:36:28.972078 | End Date: 2026-10-13T17:36:28.972078 | Status: success
-Internal Transaction ID: INT-TRX-91802626 | User: kobraf | Plan: 1-month | Amount: 100000 | Start Date: 2026-10-15T00:00:00 | End Date: 2026-11-15T00:00:00 | Status: success
