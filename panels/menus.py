@@ -14,6 +14,8 @@ from services.reports import show_reports, export_people_txt
 from services.member_services import wallet_menu, view_profile_and_subscription,view_available_classes, view_my_exercise_plan
 from Repositories.users_repository import UserRepository
 from core.exceptions import ClubError
+from core.exceptions import BackToMenu ,ClubError
+from core.back import ask
 
 # بررسی لاگین 
 def login(role_):    
@@ -28,8 +30,8 @@ def login(role_):
     while True:
         # آیا بین کاربرها ادمین با این مشخصات هست یا نه؟
         # فرض : ادمین قبل از اجرای کد رجیستر کرده و اطلاعاتش در فایل یوزرز هست
-        username = input(f"Enter {role_} username: ").strip()
-        password = input(f"Enter {role_} password: ").strip()
+        username = ask(f"Enter {role_} username (or 'back'): ")
+        password = ask(f"Enter {role_} password (or 'back'): ")
         for user in all_users:  
             if (user.username == username and
                 user.password == password and
@@ -66,81 +68,85 @@ def admin_panel(username):
             "18-log out\n"                       
         ).strip()
         
-        if choice == "1":   # add user
-            new_user = add_user("admin")
-            if new_user is not None:
-                print(f"new user created: id: {new_user.id}, name: {new_user.name}")
-            else:
-                print("new user registration failed")
+        try :
+            if choice == "1":   # add user
+                new_user = add_user("admin")
+                if new_user is not None:
+                    print(f"new user created: id: {new_user.id}, name: {new_user.name}")
+                else:
+                    print("new user registration failed")
             
-        elif choice == "2": # view user
-            view_users("admin")                      
+            elif choice == "2": # view user
+                view_users("admin")                      
             
-        elif choice == "3": # activate/deactivate user
-            change_activity_user("admin") 
+            elif choice == "3": # activate/deactivate user
+                change_activity_user("admin") 
             
-        elif choice == "4": # edit user
-            edit_user("admin")
+            elif choice == "4": # edit user
+                edit_user("admin")
             
-        elif choice =="5": # add hall
-            add_hall("admin")                            
+            elif choice =="5": # add hall
+                add_hall("admin")                            
 
-        elif choice == "6": # view hall
-            view_hall("admin")
+            elif choice == "6": # view hall
+                view_hall("admin")
             
-        elif choice =="7": # activate/deactivate hall
-            change_activity_hall("admin")
+            elif choice =="7": # activate/deactivate hall
+                change_activity_hall("admin")
             
-        elif choice == "8": # view classes
-            view_class("admin")
+            elif choice == "8": # view classes
+                view_class("admin")
           
-        elif choice == "9": # add class
-            add_class("admin")
+            elif choice == "9": # add class
+                add_class("admin")
             
-        elif choice == "10": # edit class
-            edit_class("admin")
+            elif choice == "10": # edit class
+                edit_class("admin")
             
-        elif choice == "11": # activate/deactivate class
-            change_activity_class("admin")
-        elif choice == "12":
-            try:
-                show_reports()
-            except ClubError as e:
-                print("Error:", e)
+            elif choice == "11": # activate/deactivate class
+                change_activity_class("admin")
+            elif choice == "12":
+                try:
+                    show_reports()
+                except ClubError as e:
+                    print("Error:", e)
 
-        elif choice == "13":
-            try:
-                export_people_txt()
-            except ClubError as e:
-                print("Error:", e)
+            elif choice == "13":
+                try:
+                    export_people_txt()
+                except ClubError as e:
+                    print("Error:", e)
 
-        elif choice == "14":
-            try:
-                register_subscription_for_member("admin")
-            except ClubError as e:
-                print("Error:", e)
+            elif choice == "14":
+                try:
+                    register_subscription_for_member("admin")
+                except ClubError as e:
+                    print("Error:", e)
 
-        elif choice == "15":
-            try:
-                view_all_payments("admin")
-            except ClubError as e:
-                print("Error:", e)
-        elif choice == "16":
-            try:
-                view_subscriptions_status("admin")
-            except ClubError as e:
-                print("Error:", e)
+            elif choice == "15":
+                try:
+                    view_all_payments("admin")
+                except ClubError as e:
+                    print("Error:", e)
+            elif choice == "16":
+                try:
+                    view_subscriptions_status("admin")
+                except ClubError as e:
+                    print("Error:", e)
 
-        elif choice == "17":
-            try:
-                edit_hall("admin")
-            except ClubError as e:
-                print("Error:", e)
+            elif choice == "17":
+                try:
+                    edit_hall("admin")
+                except ClubError as e:
+                    print("Error:", e)
 
-        elif choice == "18":
-            return
-        else:
-            print("invalid choice")    
+            elif choice == "18":
+                return
+            else:
+                print("invalid choice")    
+        except BackToMenu :
+            print("back to menu")
+
 
 def coach_panel(username):
     while True:
@@ -150,14 +156,17 @@ def coach_panel(username):
             "3-log out\n"
         ).strip()
 
-        if choice == "1":  
-            view_coach_class(username)
-        elif choice == "2":
-            manage_exercise_plans(username)
-        elif choice == "3":
-            return
-        else:
-            print("invalid choice")  
+        try :
+            if choice == "1":  
+                view_coach_class(username)
+            elif choice == "2":
+                manage_exercise_plans(username)
+            elif choice == "3":
+                return
+            else:
+                print("invalid choice") 
+        except BackToMenu :
+            print("back to menu")
 
 def member_panel(member_username):
     while True:
@@ -172,24 +181,27 @@ def member_panel(member_username):
         "8-log out\n"
             ).strip()
 
-        if choice == "1":
-            view_profile_and_subscription(member_username)
-        elif choice == "2":
-            wallet_menu(member_username)
-        elif choice == "3":
-            view_available_classes(member_username)
-        elif choice == "4":
-            sabtenam_class(member_username)
-        elif choice == "5":
-            view_my_enrollments(member_username)
-        elif choice == "6":
-            cancel_sabtenam_class(member_username)
-        elif choice == "7":
-            view_my_exercise_plan(member_username)
-        elif choice == "8":
-            return
-        else:
-            print("Invalid choice.")
+        try :
+            if choice == "1":
+                view_profile_and_subscription(member_username)
+            elif choice == "2":
+                wallet_menu(member_username)
+            elif choice == "3":
+                view_available_classes(member_username)
+            elif choice == "4":
+                sabtenam_class(member_username)
+            elif choice == "5":
+                view_my_enrollments(member_username)
+            elif choice == "6":
+                cancel_sabtenam_class(member_username)
+            elif choice == "7":
+                view_my_exercise_plan(member_username)
+            elif choice == "8":
+                return
+            else:
+                print("Invalid choice.")
+        except BackToMenu :
+            print("back to menu")
 
           
 

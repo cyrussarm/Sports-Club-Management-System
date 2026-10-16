@@ -13,7 +13,8 @@ from core.storage import load_data
 from core.exceptions import ClubError
 import random
 from Repositories import wallet_repository, subscriptions_repository
-
+from core.exceptions import BackToMenu
+from core.back import ask
 
 def view_profile_and_subscription(member_username):
     member = UserRepository.find_active_with_username_and_role("member", member_username)
@@ -144,7 +145,7 @@ def sabtenam_class(member_username):
         print(f"remaining = {c.remaining_capacity()}/{c.capacity}")
 
     while True:
-        choice = input("Enter the ID of selected class (or press ENTER to exit): ").strip()
+        choice = ask("Enter the ID of selected class (or press ENTER to exit): ").strip()
         if not choice:
             return
         try:
@@ -204,7 +205,7 @@ def cancel_sabtenam_class(member_username):
             print(f" class_id = {e.id}, class_title = {class_.title}")
 
     while True:
-        choice = input("Enter the ID class to cancle (or press ENTER to exit): ").strip()
+        choice = ask("Enter the ID class to cancle (or press ENTER to exit): ").strip()
         if choice in ["0",""]:
             return
         try:
@@ -276,7 +277,7 @@ def purchase_subscription(member_username):
         print(f"  {p['id']}. {p['name']} | price: {p['price']} | duration: {p['duration_months']}")
 
     while True:
-        plan_id = input("enter the plan id (0 to cancel):").strip()
+        plan_id = ask("enter the plan id (0 to cancel):").strip()
         if plan_id =="0":
             return
         try:
@@ -310,18 +311,21 @@ def wallet_menu(member_username):
             "Select: "
         ).strip()
 
-        if choice == "1":
-            view_balance(member_username)
-        elif choice == "2":
-            charge_wallet_menu(member_username)
-        elif choice == "3":
-            view_transactions(member_username)
-        elif choice == "4":
-            purchase_subscription(member_username)
-        elif choice == "5":
-            return
-        else:
-            print("Invalid choice.")
+        try:
+            if choice == "1":
+                view_balance(member_username)
+            elif choice == "2":
+                charge_wallet_menu(member_username)
+            elif choice == "3":
+                view_transactions(member_username)
+            elif choice == "4":
+                purchase_subscription(member_username)
+            elif choice == "5":
+                return
+            else:
+                print("Invalid choice.")
+        except BackToMenu:
+            print("Back to wallet menu.")
 
 
 def view_balance(member_username):
@@ -345,7 +349,7 @@ def view_transactions(member_username):
 def charge_wallet_menu(member_username): 
     while True:        
         try:                                      
-            amount = float(input("Enter amount to charge: ").strip())
+            amount = float(ask("Enter amount to charge: ").strip())
             if not isinstance(amount, (int, float)) or amount <= 0: 
                 print("Amount must be positive.")           
                 continue
@@ -353,10 +357,10 @@ def charge_wallet_menu(member_username):
         except ValueError:                          
             print("Amount must be a number.")
            
-    card_number = input(" Card number: ").strip()
+    card_number = ask(" Card number: ").strip()
     while True:
         try:
-            exp_month = int(input(" Expire month: ").strip())
+            exp_month = int(ask(" Expire month: ").strip())
             if not 1 <= exp_month <= 12:
                 print("Month must be between 1 and 12.")
                 continue
@@ -366,13 +370,13 @@ def charge_wallet_menu(member_username):
 
     while True:
         try:
-            exp_year = int(input("Expire year: ").strip())
+            exp_year = int(ask("Expire year: ").strip())
             break
         except ValueError:
             print("Year must be a number.")
 
-    pin = input("  PIN (6 digits): ").strip()
-    cvv2 = input("  CVV2 (3 digits): ").strip()
+    pin = ask("  PIN (6 digits): ").strip()
+    cvv2 = ask("  CVV2 (3 digits): ").strip()
 
     card_details = {
         "card_number": card_number,

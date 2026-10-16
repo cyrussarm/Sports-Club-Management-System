@@ -1,3 +1,12 @@
 [
-    
+    {
+        "id": "TRA-5-arefe5",
+        "user_id": "arefe5",
+        "amount": 100000,
+        "duration_months": 1,
+        "start_date": "2026-10-16T03:23:26.875776",
+        "end_date": "2026-11-16T03:23:26.875776",
+        "status": "success",
+        "subscription_name": "1-month"
+    }
 ]

@@ -8,5 +8,10 @@
         "id": 2,
         "member_username": "MemberUser",
         "balance": 0.0
+    },
+    {
+        "id": 3,
+        "member_username": "arefe5",
+        "balance": 0.0
     }
 ]
