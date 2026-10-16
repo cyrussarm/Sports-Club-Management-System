@@ -7,24 +7,24 @@ class SalonsRepository(base_repository):
 
     @classmethod
     def active_halls_list(cls):
-        return [obj_ for obj_ in cls.all() if obj_.is_active]
+        return [obj for obj in cls.all() if obj.is_active]
 
     @classmethod
     def find_hall_by_name(cls, hall_name):
-        return next((obj_ for obj_ in cls.all() if obj_.name == hall_name),None)
+        return next((obj for obj in cls.all() if obj.name == hall_name),None)
 
     @classmethod
     def find_active_hall(cls, hall_name):
-        return next((obj_ for obj_ in cls.active_halls_list() if obj_.name == hall_name),None)
+        return next((obj for obj in cls.active_halls_list() if obj.name == hall_name),None)
 
     # افزودن شی جدید
     @classmethod
-    def add(cls, obj):
+    def add(cls, new_obj):
         existing_objects = cls.all()
-        for obj_ in existing_objects:
-            if str(obj_.name) == str(obj.name):
+        for obj in existing_objects:
+            if str(obj.name) == str(new_obj.name):
                 return False
-        existing_objects.append(obj)
+        existing_objects.append(new_obj)
         cls.save_all(existing_objects)
         return True
 

@@ -8,4 +8,4 @@ class TransactionRepository(base_repository):
 
     @classmethod
     def list_by_user(cls, user_id):
-        return [obj_ for obj_ in cls.all() if obj_.user_id == user_id]
+        return [obj for obj in cls.all() if obj.user_id == user_id]

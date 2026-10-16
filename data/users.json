@@ -1,38 +1,52 @@
 [
     {
         "id": 1,
-        "name": "سیروس سرمستی",
-        "username": "s",
-        "password": "s135@",
-        "email": "sirus@gmail.com",
+        "name": "admin",
+        "username": "admin",
+        "password": "admin135@",
+        "email": "admin@gmail.com",
         "role": "admin",
-        "is_active": true
+        "is_active": true,
+        "wallet_balance": 0.0
     },
     {
         "id": 2,
-        "name": "ابوطالب سقراط زاده",
-        "username": "abutaleb@!",
-        "password": "MyTaleb$123@",
-        "email": "taleb@harchizi.com",
+        "name": "رضا",
+        "username": "reza_3451&",
+        "password": "ReZaORD#4",
+        "email": "reza@hotmail.ir",
         "role": "coach",
-        "is_active": true
+        "is_active": true,
+        "wallet_balance": 0.0
     },
     {
         "id": 3,
-        "name": "رضا",
-        "username": "reza_3451&",
-        "password": "ReZaORD#4%2%%&",
-        "email": "reza@hotmail.ir",
-        "role": "coach",
-        "is_active": true
-    },
-    {
-        "id": 4,
         "name": "kobra",
         "username": "kobraf",
         "password": "password1&",
         "email": "kobra.k@gmail.com",
         "role": "member",
-        "is_active": true
+        "is_active": true,
+        "wallet_balance": 0.0
+    },
+    {
+        "id": 4,
+        "name": "TestMember",
+        "username": "MemberUser",
+        "password": "M123&",
+        "email": null,
+        "role": "member",
+        "is_active": true,
+        "wallet_balance": 0.0
+    },
+    {
+        "id": 5,
+        "name": "Arefe",
+        "username": "arefe5",
+        "password": "arefe1@",
+        "email": "arefebhr@gmail.com",
+        "role": "member",
+        "is_active": true,
+        "wallet_balance": 0.0
     }
 ]

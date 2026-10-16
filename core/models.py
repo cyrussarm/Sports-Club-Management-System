@@ -28,7 +28,7 @@ class Users:
         d["email"] = self.email
         d["role"] = self.role
         d["is_active"] = self.is_active
-        s["Wallet balance"] = self.wallet_balance
+        d["wallet_balance"] = self.wallet_balance
         return d
 
     @classmethod
@@ -36,7 +36,8 @@ class Users:
         cls._ALLOW_INIT = True
         try:
             return cls(id_=d["id"], name=d["name"], username=d["username"], password=d["password"],
-                       email=d["email"], role=d["role"], is_active=d.get("is_active", True), wallet_balance==d["Wallet balance"])
+                       email=d["email"], role=d["role"], is_active=d.get("is_active", True), 
+                       wallet_balance=d.get("wallet_balance", 0.0))
         finally:
             cls._ALLOW_INIT = False
        
@@ -152,7 +153,7 @@ class Subscription:
         self.start_date = start_date
         self.end_date = end_date
         self.subscription_code = subscription_code
-        self.subscription_state = subscription_state  # active/expired/no-subscription
+        self.subscription_state = subscription_state
 
     def to_dict(self):
         d = {}
@@ -185,24 +186,20 @@ class Subscription:
 #--------------------------------------------
 # کلاس تراکنش
 #-------------------------------------------
-#--------------------------------------------
-# کلاس تراکنش
-#-------------------------------------------
 class Transaction:
     _ALLOW_INIT = False
-    def __init__(self, transaction_id, user_id, amount, subscription_name, duration_mounths, status):
+
+    def __init__(self, transaction_id, user_id, amount, duration_months, status, subscription_name):
         if not Transaction._ALLOW_INIT:
-            raise RuntimeError(
-                " instance creating directly is not allowed. "
-            )
-        self.id = id_
+            raise RuntimeError("instance creating directly is not allowed.")
+        self.id = transaction_id             
         self.user_id = user_id
-        self.amount = amount
-        self.subscription_name = subscription_name
-        self.duration_months = duration_months
+        self.amount = amount       
+        self.duration_months = duration_months   
         self.start_date = datetime.now()
         self.end_date = self._calculate_end_date(self.start_date, duration_months)
         self.status = status
+        self.subscription_name = subscription_name
 
     def _calculate_end_date(self, start, months):
         new_year = start.year
@@ -213,7 +210,6 @@ class Transaction:
             if new_month == 0:
                 new_month = 12
                 new_year -= 1
-
         new_day = start.day
         return start.replace(year=new_year, month=new_month, day=new_day)
 
@@ -221,22 +217,26 @@ class Transaction:
         d = {}
         d["id"] = self.id
         d["user_id"] = self.user_id
-        d["amount"] = self.amount
-        d["subscription_name"] = self.subscription_name
+        d["amount"] = self.amount        
         d["duration_months"] = self.duration_months
         d["start_date"] = self.start_date.isoformat()
         d["end_date"] = self.end_date.isoformat()
         d["status"] = self.status
+        d["subscription_name"] = self.subscription_name 
         return d
 
     @classmethod
     def from_dict(cls, d):
         cls._ALLOW_INIT = True
         try:
-            obj = cls(id_=d["id"], user_id=d["user_id"],
-                      amount=d["amount"], subscription_name=d["subscription_name"],
-                      duration_months=d["duration_months"],
-                      status=d.get("status", "موفق"))
+            obj = cls(
+                transaction_id=d["id"],             
+                user_id=d["user_id"],
+                amount=d["amount"],                
+                duration_months=d["duration_months"],
+                status=d.get("status", "success"),
+                subscription_name=d.get("subscription_name", "-")
+            )
             obj.start_date = datetime.fromisoformat(d["start_date"])
             obj.end_date = datetime.fromisoformat(d["end_date"])
             return obj
@@ -253,10 +253,10 @@ class Exercise:
                 " instance creating directly is not allowed. "
             )
         self.id = id_
-        self.name= name     # نام تمرین
-        self.sets = sets    # تعداد ست
-        self.tekrars = tekrars # تعداد تکرار
-        self.rest_time = rest_time # زمان استراحت
+        self.name= name
+        self.sets = sets
+        self.tekrars = tekrars
+        self.rest_time = rest_time
         self.description = description        
 
     def to_dict(self):
@@ -293,10 +293,10 @@ class ExercisePlan:
                 " instance creating directly is not allowed. "
             )
         self.id = id_
-        self.class_title= class_title     # نام کلاس
-        self.member_username = member_username    # یوزر عضو
-        self.coach_username = coach_username #  یوزر مربی         
-        self.exercises = exercises    # لیست تمرین ها (هر تمرین یک شی)    
+        self.class_title= class_title
+        self.member_username = member_username
+        self.coach_username = coach_username
+        self.exercises = exercises
 
     def to_dict(self):
         d={}
@@ -304,17 +304,18 @@ class ExercisePlan:
         d["class_title"] = self.class_title
         d["member_username"] = self.member_username           
         d["coach_username"] = self.coach_username
-        d["exercises"] = self.exercises           
+        d["exercises"] = [e.to_dict() for e in self.exercises]
         return d
 
     @classmethod
     def from_dict(cls,d):
         cls._ALLOW_INIT = True
         try:
+            exercises = [Exercise.from_dict(e) for e in d["exercises"]]
             return cls(id_=d["id"], class_title = d["class_title"],
                         member_username = d["member_username"],
                         coach_username = d["coach_username"],
-                        exercises = d["exercises"]                      
+                        exercises = exercises
                         )  
         finally:
             cls._ALLOW_INIT = False
@@ -383,4 +384,3 @@ class Enrollment:
                        is_active=d.get("is_active", True))
         finally:
             cls._ALLOW_INIT = False
-

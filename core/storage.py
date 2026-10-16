@@ -13,7 +13,10 @@ def load_data(filename):
     try:
         # Convert from JSON to Python:
         with open(path,"r",encoding="utf-8") as f:
-            return json.load(f)
+            content = f.read().strip()
+            if not content:                     
+                return []     # برطرف کردن خطای فایلهای خالی
+            return json.loads(content)
     except (OSError, json.JSONDecodeError) as e:
         raise StorageError(f"failed to load {filename}: {e}") from e
 

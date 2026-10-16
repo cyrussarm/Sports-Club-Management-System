@@ -7,7 +7,6 @@ def show_reports():
     classes = KelasRepository.all()
     subscriptions = Subs_repository.all()
 
-    # --- basic reports ---
     active_members = 0
     active_coaches = 0
     for u in users:
@@ -31,13 +30,12 @@ def show_reports():
     print(f"Active classes: {active_classes}")
     print(f"Total revenue: {total_revenue}")
 
-    # --- advanced: revenue per subscription type ---
     revenue_by_type = {}
     for s in subscriptions:
         sub_type = s.subscription_type
         if sub_type not in revenue_by_type:
             revenue_by_type[sub_type] = 0
-        revenue_by_type[sub_type] += s["amount"]
+        revenue_by_type[sub_type] += s.amount
 
     print("----- Revenue by subscription -----")
     if not revenue_by_type:
@@ -45,7 +43,6 @@ def show_reports():
     for sub_type, amount in revenue_by_type.items():
         print(f"{sub_type}: {amount}")
 
-    # --- advanced: most popular class ---
     print("----- Most popular class -----")
     best_class = None
     for c in classes:
