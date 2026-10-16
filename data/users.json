@@ -38,5 +38,15 @@
         "role": "member",
         "is_active": true,
         "wallet_balance": 0.0
+    },
+    {
+        "id": 5,
+        "name": "Arefe",
+        "username": "arefe5",
+        "password": "arefe1@",
+        "email": "arefebhr@gmail.com",
+        "role": "member",
+        "is_active": true,
+        "wallet_balance": 0.0
     }
 ]

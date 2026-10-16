@@ -4,3 +4,5 @@ class ClubError(Exception):
 class StorageError(ClubError):
     pass
 
+class BackToMenu(Exception) :
+    pass

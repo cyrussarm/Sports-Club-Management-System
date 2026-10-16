@@ -1,3 +1,13 @@
 [
-   
+    {
+        "id": 1,
+        "member_username": "arefe5",
+        "subscription_type": "1-month",
+        "amount": 100000,
+        "payment_date": "2026-10-16",
+        "start_date": "2026-10-16",
+        "end_date": "2026-11-16",
+        "subscription_code": "SUB-5-arefe5",
+        "subscription_state": "active"
+    }
 ]

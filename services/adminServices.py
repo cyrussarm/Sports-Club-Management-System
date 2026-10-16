@@ -16,6 +16,7 @@ from core.models import Wallet
 from core.exceptions import ClubError
 from services.validation import validate_user_registration
 from core.models import Users, SportClass, Salon
+from core.back import ask
 
 ALLOWED_ROLES = ["admin"]
 
@@ -45,17 +46,17 @@ def add_user(current_role):
         print("Only the admin is authorized to do this.")
         return None
     while True:
-        user_role = input("Enter user type (coach/member): ").strip().lower()
+        user_role = ask("Enter user type (coach/member): ")
         if user_role in ["coach", "member"]:
             break
         else:
             print("Invalid user type. Please enter 'coach' or 'member'.")
 
     # برای نام در سند محدودیت ذکر نشده ولی چک میکنم که خالی نباشه
-    name = input("Enter name: ").strip()
-    username = input("Enter username: ").strip()
-    password = input("Enter password: ").strip()
-    email = input("Enter email: ").strip() 
+    name = ask("Enter name: ")
+    username = ask("Enter username: ")
+    password = ask("Enter password: ")
+    email = ask("Enter email: ")
     if email=="":
         email = None
     # وارد کردن ایمیل اختیاری است ولی اگر وارد شد باید درست بودنش چک شود
@@ -119,7 +120,7 @@ def change_activity_user(current_role):
     if current_role.lower() not in ALLOWED_ROLES:
         print("Only the admin is authorized to do this.")
         return 
-    username = input("Enter username of the user to activate/deactivate: ").strip()
+    username = ask("Enter username of the user to activate/deactivate: ")
     try:
         user = UserRepository.find_by_username(username)
         if user is None:
@@ -127,13 +128,13 @@ def change_activity_user(current_role):
             return 
         else:
             if user.is_active:
-                answer = input("user is active. Deactivate?(Y/N)").strip()
+                answer = ask("user is active. Deactivate?(Y/N)")
                 if answer.lower()=="y":
                     UserRepository.deactivate(user.id)
                     print(f"User '{username}' deactivated.")
                     return
             else:
-                answer = input("user is not active. Activate?(Y/N)").strip()
+                answer = ask("user is not active. Activate?(Y/N)")
                 if answer.lower()=="y":
                     UserRepository.activate(user.id)
                     print(f"User '{username}' activated.")
@@ -147,18 +148,18 @@ def edit_user(current_role):
     if current_role.lower() not in ALLOWED_ROLES:
         print("Only the admin is authorized to do this.")
         return 
-    username = input("Enter username of the user to edit: ").strip()
+    username = ask("Enter username of the user to edit: ")
     try:
         user = UserRepository.find_by_username(username)
         if user is None:
             print(f"no user found with username: {username}")
             return 
-        new_name = input(f"New name ({user.name}): ").strip()
-        new_email = input(f"New email ({user.email}): ").strip()
-        new_pass = input(f"New password : ").strip()
+        new_name = ask(f"New name ({user.name}): ")
+        new_email = ask(f"New email ({user.email}): ")
+        new_pass = ask(f"New password : ")
         activity = "active" if user.is_active else "inactive"
         print(f"current activity is: {activity} ")
-        new_activity = input("Change activity? (Y/N)").strip().lower()
+        new_activity = ask("Change activity? (Y/N)")
         
         name_=user.name
         if new_name :
@@ -200,7 +201,7 @@ def add_hall(current_role):
         print("Only the admin is authorized to do this.")
         return 
     while True:
-        hall_name = input("Hall name: ").strip()
+        hall_name = ask("Hall name: ")
         if hall_name:
             break
         print("Hall name cannot be empty.")
@@ -216,7 +217,7 @@ def add_hall(current_role):
     # مشخصات سالن جدید را بگیر 
     while True:
         try:
-            capacity=int(input("enter capacity : ").strip())
+            capacity=int(ask("enter capacity : "))
             if capacity<=0:
                 print("capacity must be a positive number")
                 continue
@@ -224,7 +225,7 @@ def add_hall(current_role):
                 break 
         except ValueError:
             print("Capacity must be a number.")
-    text = input("Equipments (comma separated): ").strip()
+    text = ask("Equipments (comma separated): ")
     equipments = [e.strip() for e in text.split(",") if e.strip()] if text else []  
     try:    
         dict_ = {"id": generate_hall_id(),"name": hall_name, "capacity": capacity,"equipments": equipments, "is_active": True}    
@@ -263,7 +264,7 @@ def change_activity_hall(current_role):
     if current_role.lower() not in ALLOWED_ROLES:
         print("Only the admin is authorized to do this.")
         return 
-    hallname = input("Enter name of the hall to activate/deactivate: ").strip()
+    hallname = ask("Enter name of the hall to activate/deactivate: ")
     try:
         hall = SalonsRepository.find_hall_by_name(hallname)
         if hall is None:
@@ -271,13 +272,13 @@ def change_activity_hall(current_role):
             return 
         else:
             if hall.is_active:
-                answer = input("hall is active. Deactivate?(Y/N)").strip()
+                answer = ask("hall is active. Deactivate?(Y/N)")
                 if answer.lower()=="y":
                     SalonsRepository.deactivate(hall.id)
                     print(f"hall '{hallname}' deactivated.")
                     return
             else:
-                answer = input("hall is not active. Activate?(Y/N)").strip()
+                answer = ask("hall is not active. Activate?(Y/N)")
                 if answer.lower()=="y":
                     SalonsRepository.activate(hall.id)
                     print(f"Hall '{hall.name}' activated.")
@@ -326,7 +327,7 @@ def add_class(current_role):
 
     #پیش از ایجاد کلاس بررسی شود که سالن وجود داشته باشد و فعال باشد
     while True:
-        hall_name = input("Hall name: ").strip()
+        hall_name = ask("Hall name: ")
         if hall_name:
             break
         print("Hall name cannot be empty.")
@@ -343,7 +344,7 @@ def add_class(current_role):
         return
     #پیش از ایجاد کلاس بررسی شود که مربی وجود داشته باشد و فعال باشد
     while True:
-        coach_username = input("Coach username: ").strip()
+        coach_username = ask("Coach username: ")
         if coach_username:
             break
         print("coach username cannot be empty.")    
@@ -363,7 +364,7 @@ def add_class(current_role):
     #     
     
     while True:       
-        title = input("Class title: ").strip()        
+        title = ask("Class title: ")      
         if not title:
             print("Class title cannot be empty.")
             continue
@@ -380,7 +381,7 @@ def add_class(current_role):
 
     while True:   
         try:            
-            capacity = int(input("enter capacity : ").strip())
+            capacity = int(ask("enter capacity : "))
             if capacity <= 0:
                 print("capacity must be a positive number")
                 continue           
@@ -389,19 +390,19 @@ def add_class(current_role):
             print("Capacity must be a number.")  
 
     while True:
-        sport_type = input("Sport type: ").strip()
+        sport_type = ask("Sport type: ")
         if not sport_type:
             print("sport type cannot be empty.")            
         else:
             break
     while True:
-        day = input("Day: ").strip()
+        day = ask("Day: ")
         if not day:
             print("day cannot be empty.")            
         else:
             break
     while True:
-        class_time = input("Time: ").strip()
+        class_time = ask("Time: ")
         if not class_time:
             print("time cannot be empty.")
         else:
@@ -427,7 +428,7 @@ def edit_class(current_role):
         return
 
     while True:
-        title = input("Class title to edit: ").strip()
+        title = ask("Class title to edit: ")
         if title:
             break
         print("Title cannot be empty.")
@@ -443,17 +444,17 @@ def edit_class(current_role):
         return
 
     # عنوان
-    new_title = input(f"New title ({target_class.title}, Enter to keep): ").strip()
+    new_title = ask(f"New title ({target_class.title}, Enter to keep): ")
     if not new_title:
         new_title = target_class.title
 
     # نوع ورزش
-    new_sport = input(f"New sport type ({target_class.sport_type}, Enter to keep): ").strip()
+    new_sport = ask(f"New sport type ({target_class.sport_type}, Enter to keep): ")
     if not new_sport:
         new_sport = target_class.sport_type
 
     # سالن
-    new_hall_name = input(f"New hall name ({target_class.hall_name}, Enter to keep): ").strip()
+    new_hall_name = ask(f"New hall name ({target_class.hall_name}, Enter to keep): ")
     if new_hall_name:
         try:
             hall = SalonsRepository.find_active_hall(new_hall_name)
@@ -478,7 +479,7 @@ def edit_class(current_role):
     new_coach_name = target_class.coach_name
     new_coach_username = target_class.coach_username
 
-    new_coach = input(f"New coach ({target_class.coach_username}, Enter to keep): ").strip()
+    new_coach = ask(f"New coach ({target_class.coach_username}, Enter to keep): ")
     if new_coach:
         try:
             coach = UserRepository.find_active_with_username_and_role("coach", new_coach)
@@ -493,18 +494,18 @@ def edit_class(current_role):
 
     # روز و ساعت
     new_day = target_class.day
-    day_input = input(f"New day ({target_class.day}, Enter to keep): ").strip()
+    day_input = ask(f"New day ({target_class.day}, Enter to keep): ")
     if day_input:
         new_day = day_input
 
     new_time = target_class.time
-    time_input = input(f"New time ({target_class.time}, Enter to keep): ").strip()
+    time_input = ask(f"New time ({target_class.time}, Enter to keep): ")
     if time_input:
         new_time = time_input
 
     # ظرفیت
     new_capacity = target_class.capacity
-    text = input(f"New capacity ({target_class.capacity}, Enter to keep): ").strip()
+    text = ask(f"New capacity ({target_class.capacity}, Enter to keep): ")
     if text:
         try:
             new_capacity = int(text)
@@ -551,7 +552,7 @@ def change_activity_class(current_role):
         print("Only the admin is authorized to do this.")
         return 
 
-    classid = input("Enter id of the class to activate/deactivate: ").strip()
+    classid = ask("Enter id of the class to activate/deactivate: ")
        
     try:
         class_ = KelasRepository.find_by_id(classid)
@@ -560,13 +561,13 @@ def change_activity_class(current_role):
             return 
         else:
             if class_.is_active:
-                answer = input("class is active. Deactivate?(Y/N)").strip()
+                answer = ask("class is active. Deactivate?(Y/N)")
                 if answer.lower()=="y":
                     KelasRepository.deactivate(class_.id)
                     print(f"class '{class_.title}' deactivated.")
                     return
             else:
-                answer = input("class is not active. Activate?(Y/N)").strip()
+                answer = ask("class is not active. Activate?(Y/N)")
                 if answer.lower()=="y":
                     KelasRepository.activate(class_.id)
                     print(f"class '{class_.title}' activated.")
@@ -581,7 +582,7 @@ def edit_hall(current_role):
         print("Only the admin is authorized to do this.")
         return
 
-    hall_name = input("Enter hall name to edit: ").strip()
+    hall_name = ask("Enter hall name to edit: ")
     try:
         hall = SalonsRepository.find_hall_by_name(hall_name)
     except ClubError as e:
@@ -595,7 +596,7 @@ def edit_hall(current_role):
     print(f"Editing hall: {hall.name}")
     print("Press Enter to keep current value.")
 
-    new_name = input(f"New name ({hall.name}): ").strip()
+    new_name = ask(f"New name ({hall.name}): ")
     if not new_name:
         new_name = hall.name
     else:       
@@ -609,7 +610,7 @@ def edit_hall(current_role):
             return
     
     new_capacity = hall.capacity
-    cap_input = input(f"New capacity ({hall.capacity}): ").strip()
+    cap_input = ask(f"New capacity ({hall.capacity}): ")
     if cap_input:
         try:
             new_capacity = int(cap_input)
@@ -622,7 +623,7 @@ def edit_hall(current_role):
     
     current_equip = ", ".join(hall.equipments) if hall.equipments else "(none)"
     print(f"Current equipments: {current_equip}")
-    equip_input = input("New equipments (comma separated, Enter to keep): ").strip()
+    equip_input = ask("New equipments (comma separated, Enter to keep): ")
     if equip_input:
         new_equipments = [e.strip() for e in equip_input.split(",") if e.strip()]
     else:
@@ -673,7 +674,7 @@ def register_subscription_for_member(current_role):
         print("Only the admin is authorized to do this.")
         return
     
-    username = input("Enter member username (case-sensitive ast): ").strip()
+    username = ask("Enter member username (case-sensitive ast): ")
     member = UserRepository.find_by_username(username)
     if member is None:
         print(f"No user found with username: {username}")
@@ -699,7 +700,7 @@ def register_subscription_for_member(current_role):
     #  انتخاب پلن
     while True:
         try:
-            plan_id = int(input("Select plan id (or 0 to back): ").strip())
+            plan_id = int(ask("Select plan id (or 0 to back): "))
             if plan_id == 0:
                 return
             selected_plan = None

@@ -3,6 +3,7 @@ from Repositories.users_repository import UserRepository
 from Repositories.exercise_plan_repository import exercise_plan_repository
 from core.models import Exercise, ExercisePlan
 from core.exceptions import ClubError
+from core.back import ask
 
 # مشاهده کلاس
 def view_coach_class(coach_username): 
@@ -39,7 +40,7 @@ def manage_exercise_plans(coach_username):
     
     while True:
         try:
-            target_class_id = int(input("\nEnter class id (0 to cancel): ").strip())
+            target_class_id = int(ask("\nEnter class id (0 to cancel): ").strip())
         except ValueError:
             print("enter a number.")
             continue
@@ -65,7 +66,7 @@ def manage_exercise_plans(coach_username):
             print(f"  name: {member.name} | username: ({member.username})")
         
     while True:
-        member_username = input("Enter member username (0 to cancel)").strip()        
+        member_username = ask("Enter member username (0 to cancel)").strip()        
         if member_username == "0":
             return
         if member_username not in target_class.enrolled:
@@ -80,13 +81,13 @@ def manage_exercise_plans(coach_username):
     workout_list = []
     while True:
         print(f"Enter workout : {len(workout_list)+1}")
-        work_name = input("enter name of workout (0 to finish)").strip()
+        work_name = ask("enter name of workout (0 to finish)").strip()
         if not work_name or work_name == "0":
             break
 
         while True:  
             try:
-                set_numbers = input("enter number of sets:").strip()
+                set_numbers = ask("enter number of sets:").strip()
                 set_numbers = int(set_numbers)
                 if set_numbers<=0:
                     print("you must enter a positive number")
@@ -97,7 +98,7 @@ def manage_exercise_plans(coach_username):
         
         while True:
             try:
-                rep_numbers = input("enter repetition's number:").strip()
+                rep_numbers = ask("enter repetition's number:").strip()
                 rep_numbers = int(rep_numbers)
                 if rep_numbers<=0:
                     print("you must enter a positive number")
@@ -107,10 +108,10 @@ def manage_exercise_plans(coach_username):
                 print("you must enter a number")
             
                     
-        rest_times = input("enter rest times (for ex. (2 min.))").strip()
+        rest_times = ask("enter rest times (for ex. (2 min.))").strip()
         if not rest_times:
             rest_times = "-"
-        desc = input("any description/comment about this workout (optional)").strip()
+        desc = ask("any description/comment about this workout (optional)").strip()
         if not desc:
             desc = "-"
 
@@ -119,7 +120,7 @@ def manage_exercise_plans(coach_username):
         workout_list.append(Exercise.from_dict(dict_))
         print(f"'{work_name}' added.")
 
-        inp_ = input("Add another exercise? (Y/N): ").strip().lower()
+        inp_ = ask("Add another exercise? (Y/N): ").strip().lower()
         if inp_ != "y":
             break
 
@@ -149,7 +150,7 @@ def manage_exercise_plans(coach_username):
             exist = True
     
     if exist:
-        inp_ = input(f"do you want to update {p_.class_title } exercise of {p_.member_username}? (Y/N)").strip().lower()
+        inp_ = ask(f"do you want to update {p_.class_title } exercise of {p_.member_username}? (Y/N)").strip().lower()
         if inp_=="y":
             new_plan.id = p_.id
             exercise_plan_repository.update(new_plan)
@@ -159,12 +160,3 @@ def manage_exercise_plans(coach_username):
     else:
         exercise_plan_repository.add(new_plan)
         print(f"\n Exercise plan created for {member.name}.")
-
-    
-    
-
-
-
-        
-
-       

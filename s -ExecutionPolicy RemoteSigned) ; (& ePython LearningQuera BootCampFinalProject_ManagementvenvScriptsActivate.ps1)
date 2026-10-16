@@ -1,0 +1,570 @@
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Bank.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/base_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/classes_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/exercise_plan_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/halls_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/sabtenam_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/subscriptions_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/transactions_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/users_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Repositories/wallet_repository.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'core/exceptions.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'core/models.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'core/storage.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/exercise_plan.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/sabtenam.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/salons.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/sport_classes.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/subscription_plans.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/subscriptions.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/transactions.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/users.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/wallets.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'panels/menus.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'services/adminServices.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'services/coach_services.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'services/member_services.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'services/reports.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'services/validation.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'services/wallet_services.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/wallet_test.py', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/core/exceptions.py b/core/exceptions.py[m
+[1mindex 4c0af39..4a0d2a8 100644[m
+[1m--- a/core/exceptions.py[m
+[1m+++ b/core/exceptions.py[m
+[36m@@ -4,3 +4,5 @@[m [mclass ClubError(Exception):[m
+ class StorageError(ClubError):[m
+     pass[m
+ [m
+[32m+[m[32mclass BackToMenu(Exception) :[m
+[32m+[m[32m    pass[m
+\ No newline at end of file[m
+[1mdiff --git a/data/subscriptions.json b/data/subscriptions.json[m
+[1mindex ab42009..ec118ce 100644[m
+[1m--- a/data/subscriptions.json[m
+[1m+++ b/data/subscriptions.json[m
+[36m@@ -1,3 +1,13 @@[m
+ [[m
+[31m-   [m
+[32m+[m[32m    {[m
+[32m+[m[32m        "id": 1,[m
+[32m+[m[32m        "member_username": "arefe5",[m
+[32m+[m[32m        "subscription_type": "1-month",[m
+[32m+[m[32m        "amount": 100000,[m
+[32m+[m[32m        "payment_date": "2026-10-16",[m
+[32m+[m[32m        "start_date": "2026-10-16",[m
+[32m+[m[32m        "end_date": "2026-11-16",[m
+[32m+[m[32m        "subscription_code": "SUB-5-arefe5",[m
+[32m+[m[32m        "subscription_state": "active"[m
+[32m+[m[32m    }[m
+ ][m
+\ No newline at end of file[m
+[1mdiff --git a/data/transactions.json b/data/transactions.json[m
+[1mindex 1610ea1..0641a36 100644[m
+[1m--- a/data/transactions.json[m
+[1m+++ b/data/transactions.json[m
+[36m@@ -1,3 +1,12 @@[m
+ [[m
+[31m-    [m
+[32m+[m[32m    {[m
+[32m+[m[32m        "id": "TRA-5-arefe5",[m
+[32m+[m[32m        "user_id": "arefe5",[m
+[32m+[m[32m        "amount": 100000,[m
+[32m+[m[32m        "duration_months": 1,[m
+[32m+[m[32m        "start_date": "2026-10-16T03:23:26.875776",[m
+[32m+[m[32m        "end_date": "2026-11-16T03:23:26.875776",[m
+[32m+[m[32m        "status": "success",[m
+[32m+[m[32m        "subscription_name": "1-month"[m
+[32m+[m[32m    }[m
+ ][m
+\ No newline at end of file[m
+[1mdiff --git a/data/users.json b/data/users.json[m
+[1mindex 26cd42c..bedb5e2 100644[m
+[1m--- a/data/users.json[m
+[1m+++ b/data/users.json[m
+[36m@@ -38,5 +38,15 @@[m
+         "role": "member",[m
+         "is_active": true,[m
+         "wallet_balance": 0.0[m
+[32m+[m[32m    },[m
+[32m+[m[32m    {[m
+[32m+[m[32m        "id": 5,[m
+[32m+[m[32m        "name": "Arefe",[m
+[32m+[m[32m        "username": "arefe5",[m
+[32m+[m[32m        "password": "arefe1@",[m
+[32m+[m[32m        "email": "arefebhr@gmail.com",[m
+[32m+[m[32m        "role": "member",[m
+[32m+[m[32m        "is_active": true,[m
+[32m+[m[32m        "wallet_balance": 0.0[m
+     }[m
+ ][m
+\ No newline at end of file[m
+[1mdiff --git a/data/wallets.json b/data/wallets.json[m
+[1mindex cb4a8d1..34898c8 100644[m
+[1m--- a/data/wallets.json[m
+[1m+++ b/data/wallets.json[m
+[36m@@ -8,5 +8,10 @@[m
+         "id": 2,[m
+         "member_username": "MemberUser",[m
+         "balance": 0.0[m
+[32m+[m[32m    },[m
+[32m+[m[32m    {[m
+[32m+[m[32m        "id": 3,[m
+[32m+[m[32m        "member_username": "arefe5",[m
+[32m+[m[32m        "balance": 0.0[m
+     }[m
+ ][m
+\ No newline at end of file[m
+[1mdiff --git a/main.py b/main.py[m
+[1mindex c515544..e3a72eb 100644[m
+[1m--- a/main.py[m
+[1m+++ b/main.py[m
+[36m@@ -1,4 +1,5 @@[m
+[31m-[m
+[32m+[m[32mfrom core.back import ask[m
+[32m+[m[32mfrom core.exceptions import BackToMenu[m
+ from panels.menus import login, admin_panel, coach_panel, member_panel[m
+ def main():  [m
+     [m
+[36m@@ -9,30 +10,33 @@[m [mdef main():[m
+             "3-member login\n"[m
+             "4-exit\n"[m
+             "Select: ").strip()[m
+[31m-        if choice == "1":[m
+[31m-            admin = login("admin")[m
+[31m-            if admin is not None:   [m
+[31m-                admin_panel(admin.username)[m
+[31m-            else:[m
+[31m-                print("Invalid admin credentials.")[m
+[31m-        elif choice == "2":[m
+[31m-            coach = login("coach")[m
+[31m-            if coach:       [m
+[31m-                coach_panel(coach.username)[m
+[32m+[m[41m        [m
+[32m+[m[32m        try :[m
+[32m+[m[32m            if choice == "1":[m
+[32m+[m[32m                admin = login("admin")[m
+[32m+[m[32m                if admin is not None:[m[41m   [m
+[32m+[m[32m                    admin_panel(admin.username)[m
+[32m+[m[32m                else:[m
+[32m+[m[32m                    print("Invalid admin credentials.")[m
+[32m+[m[32m            elif choice == "2":[m
+[32m+[m[32m                coach = login("coach")[m
+[32m+[m[32m                if coach:[m[41m       [m
+[32m+[m[32m                    coach_panel(coach.username)[m
+[32m+[m[32m                else:[m
+[32m+[m[32m                    print("Invalid coach")[m
+[32m+[m[32m            elif choice == "3":[m[41m            [m
+[32m+[m[32m                member = login("member")[m
+[32m+[m[32m                if member:[m
+[32m+[m[32m                    member_panel(member.username)[m
+[32m+[m[32m                else:[m
+[32m+[m[32m                    print("Invalid member")[m
+[32m+[m[32m            elif choice == "4" :[m
+[32m+[m[32m                print("Exiting the program.")[m
+[32m+[m[32m                break[m[41m            [m
+             else:[m
+[31m-                print("Invalid coach")[m
+[31m-        elif choice == "3":            [m
+[31m-            member = login("member")[m
+[31m-            if member:[m
+[31m-                member_panel(member.username)[m
+[31m-            else:[m
+[31m-                print("Invalid member")[m
+[31m-        elif choice == "4" :[m
+[31m-            print("Exiting the program.")[m
+[31m-            break            [m
+[31m-        else:[m
+[31m-            print("Invalid choice. Please try again.")[m
+[31m-    [m
+[32m+[m[32m                print("Invalid choice. Please try again.")[m
+[32m+[m[32m        except BackToMenu :[m
+[32m+[m[32m            print("back to menu")[m
+ [m
+ if __name__=="__main__":[m
+     main()[m
+[1mdiff --git a/panels/menus.py b/panels/menus.py[m
+[1mindex 9c6ccd1..84ba452 100644[m
+[1m--- a/panels/menus.py[m
+[1m+++ b/panels/menus.py[m
+[36m@@ -14,6 +14,8 @@[m [mfrom services.reports import show_reports, export_people_txt[m
+ from services.member_services import wallet_menu, view_profile_and_subscription,view_available_classes, view_my_exercise_plan[m
+ from Repositories.users_repository import UserRepository[m
+ from core.exceptions import ClubError[m
+[32m+[m[32mfrom core.exceptions import BackToMenu ,ClubError[m
+[32m+[m[32mfrom core.back import ask[m
+ [m
+ # بررسی لاگین [m
+ def login(role_):    [m
+[36m@@ -28,8 +30,8 @@[m [mdef login(role_):[m
+     while True:[m
+         # آیا بین کاربرها ادمین با این مشخصات هست یا نه؟[m
+         # فرض : ادمین قبل از اجرای کد رجیستر کرده و اطلاعاتش در فایل یوزرز هست[m
+[31m-        username = input(f"Enter {role_} username: ").strip()[m
+[31m-        password = input(f"Enter {role_} password: ").strip()[m
+[32m+[m[32m        username = ask(f"Enter {role_} username (or 'back'): ")[m
+[32m+[m[32m        password = ask(f"Enter {role_} password (or 'back'): ")[m
+         for user in all_users:  [m
+             if (user.username == username and[m
+                 user.password == password and[m
+[36m@@ -66,81 +68,85 @@[m [mdef admin_panel(username):[m
+             "18-log out\n"                       [m
+         ).strip()[m
+         [m
+[31m-        if choice == "1":   # add user[m
+[31m-            new_user = add_user("admin")[m
+[31m-            if new_user is not None:[m
+[31m-                print(f"new user created: id: {new_user.id}, name: {new_user.name}")[m
+[31m-            else:[m
+[31m-                print("new user registration failed")[m
+[32m+[m[32m        try :[m
+[32m+[m[32m            if choice == "1":   # add user[m
+[32m+[m[32m                new_user = add_user("admin")[m
+[32m+[m[32m                if new_user is not None:[m
+[32m+[m[32m                    print(f"new user created: id: {new_user.id}, name: {new_user.name}")[m
+[32m+[m[32m                else:[m
+[32m+[m[32m                    print("new user registration failed")[m
+             [m
+[31m-        elif choice == "2": # view user[m
+[31m-            view_users("admin")                      [m
+[32m+[m[32m            elif choice == "2": # view user[m
+[32m+[m[32m                view_users("admin")[m[41m                      [m
+             [m
+[31m-        elif choice == "3": # activate/deactivate user[m
+[31m-            change_activity_user("admin") [m
+[32m+[m[32m            elif choice == "3": # activate/deactivate user[m
+[32m+[m[32m                change_activity_user("admin")[m[41m [m
+             [m
+[31m-        elif choice == "4": # edit user[m
+[31m-            edit_user("admin")[m
+[32m+[m[32m            elif choice == "4": # edit user[m
+[32m+[m[32m                edit_user("admin")[m
+             [m
+[31m-        elif choice =="5": # add hall[m
+[31m-            add_hall("admin")                            [m
+[32m+[m[32m            elif choice =="5": # add hall[m
+[32m+[m[32m                add_hall("admin")[m[41m                            [m
+ [m
+[31m-        elif choice == "6": # view hall[m
+[31m-            view_hall("admin")[m
+[32m+[m[32m            elif choice == "6": # view hall[m
+[32m+[m[32m                view_hall("admin")[m
+             [m
+[31m-        elif choice =="7": # activate/deactivate hall[m
+[31m-            change_activity_hall("admin")[m
+[32m+[m[32m            elif choice =="7": # activate/deactivate hall[m
+[32m+[m[32m                change_activity_hall("admin")[m
+             [m
+[31m-        elif choice == "8": # view classes[m
+[31m-            view_class("admin")[m
+[32m+[m[32m            elif choice == "8": # view classes[m
+[32m+[m[32m                view_class("admin")[m
+           [m
+[31m-        elif choice == "9": # add class[m
+[31m-            add_class("admin")[m
+[32m+[m[32m            elif choice == "9": # add class[m
+[32m+[m[32m                add_class("admin")[m
+             [m
+[31m-        elif choice == "10": # edit class[m
+[31m-            edit_class("admin")[m
+[32m+[m[32m            elif choice == "10": # edit class[m
+[32m+[m[32m                edit_class("admin")[m
+             [m
+[31m-        elif choice == "11": # activate/deactivate class[m
+[31m-            change_activity_class("admin")[m
+[31m-        elif choice == "12":[m
+[31m-            try:[m
+[31m-                show_reports()[m
+[31m-            except ClubError as e:[m
+[31m-                print("Error:", e)[m
+[32m+[m[32m            elif choice == "11": # activate/deactivate class[m
+[32m+[m[32m                change_activity_class("admin")[m
+[32m+[m[32m            elif choice == "12":[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    show_reports()[m
+[32m+[m[32m                except ClubError as e:[m
+[32m+[m[32m                    print("Error:", e)[m
+[32m+[m
+[32m+[m[32m            elif choice == "13":[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    export_people_txt()[m
+[32m+[m[32m                except ClubError as e:[m
+[32m+[m[32m                    print("Error:", e)[m
+ [m
+[31m-        elif choice == "13":[m
+[31m-            try:[m
+[31m-                export_people_txt()[m
+[31m-            except ClubError as e:[m
+[31m-                print("Error:", e)[m
+[32m+[m[32m            elif choice == "14":[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    register_subscription_for_member("admin")[m
+[32m+[m[32m                except ClubError as e:[m
+[32m+[m[32m                    print("Error:", e)[m
+ [m
+[31m-        elif choice == "14":[m
+[31m-            try:[m
+[31m-                register_subscription_for_member("admin")[m
+[31m-            except ClubError as e:[m
+[31m-                print("Error:", e)[m
+[32m+[m[32m            elif choice == "15":[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    view_all_payments("admin")[m
+[32m+[m[32m                except ClubError as e:[m
+[32m+[m[32m                    print("Error:", e)[m
+[32m+[m[32m            elif choice == "16":[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    view_subscriptions_status("admin")[m
+[32m+[m[32m                except ClubError as e:[m
+[32m+[m[32m                    print("Error:", e)[m
+ [m
+[31m-        elif choice == "15":[m
+[31m-            try:[m
+[31m-                view_all_payments("admin")[m
+[31m-            except ClubError as e:[m
+[31m-                print("Error:", e)[m
+[31m-        elif choice == "16":[m
+[31m-            try:[m
+[31m-                view_subscriptions_status("admin")[m
+[31m-            except ClubError as e:[m
+[31m-                print("Error:", e)[m
+[32m+[m[32m            elif choice == "17":[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    edit_hall("admin")[m
+[32m+[m[32m                except ClubError as e:[m
+[32m+[m[32m                    print("Error:", e)[m
+ [m
+[31m-        elif choice == "17":[m
+[31m-            try:[m
+[31m-                edit_hall("admin")[m
+[31m-            except ClubError as e:[m
+[31m-                print("Error:", e)[m
+[32m+[m[32m            elif choice == "18":[m
+[32m+[m[32m                return[m
+[32m+[m[32m            else:[m
+[32m+[m[32m                print("invalid choice")[m[41m    [m
+[32m+[m[32m        except BackToMenu :[m
+[32m+[m[32m            print("back to menu")[m
+ [m
+[31m-        elif choice == "18":[m
+[31m-            return[m
+[31m-        else:[m
+[31m-            print("invalid choice")    [m
+ [m
+ def coach_panel(username):[m
+     while True:[m
+[36m@@ -150,14 +156,17 @@[m [mdef coach_panel(username):[m
+             "3-log out\n"[m
+         ).strip()[m
+ [m
+[31m-        if choice == "1":  [m
+[31m-            view_coach_class(username)[m
+[31m-        elif choice == "2":[m
+[31m-            manage_exercise_plans(username)[m
+[31m-        elif choice == "3":[m
+[31m-            return[m
+[31m-        else:[m
+[31m-            print("invalid choice")  [m
+[32m+[m[32m        try :[m
+[32m+[m[32m            if choice == "1":[m[41m  [m
+[32m+[m[32m                view_coach_class(username)[m
+[32m+[m[32m            elif choice == "2":[m
+[32m+[m[32m                manage_exercise_plans(username)[m
+[32m+[m[32m            elif choice == "3":[m
+[32m+[m[32m                return[m
+[32m+[m[32m            else:[m
+[32m+[m[32m                print("invalid choice")[m[41m [m
+[32m+[m[32m        except BackToMenu :[m
+[32m+[m[32m            print("back to menu")[m
+ [m
+ def member_panel(member_username):[m
+     while True:[m
+[36m@@ -172,24 +181,27 @@[m [mdef member_panel(member_username):[m
+         "8-log out\n"[m
+             ).strip()[m
+ [m
+[31m-        if choice == "1":[m
+[31m-            view_profile_and_subscription(member_username)[m
+[31m-        elif choice == "2":[m
+[31m-            wallet_menu(member_username)[m
+[31m-        elif choice == "3":[m
+[31m-            view_available_classes(member_username)[m
+[31m-        elif choice == "4":[m
+[31m-            sabtenam_class(member_username)[m
+[31m-        elif choice == "5":[m
+[31m-            view_my_enrollments(member_username)[m
+[31m-        elif choice == "6":[m
+[31m-            cancel_sabtenam_class(member_username)[m
+[31m-        elif choice == "7":[m
+[31m-            view_my_exercise_plan(member_username)[m
+[31m-        elif choice == "8":[m
+[31m-            return[m
+[31m-        else:[m
+[31m-            print("Invalid choice.")[m
+[32m+[m[32m        try :[m
+[32m+[m[32m            if choice == "1":[m
+[32m+[m[32m                view_profile_and_subscription(member_username)[m
+[32m+[m[32m            elif choice == "2":[m
+[32m+[m[32m                wallet_menu(member_username)[m
+[32m+[m[32m            elif choice == "3":[m
+[32m+[m[32m                view_available_classes(member_username)[m
+[32m+[m[32m            elif choice == "4":[m
+[32m+[m[32m                sabtenam_class(member_username)[m
+[32m+[m[32m            elif choice == "5":[m
+[32m+[m[32m                view_my_enrollments(member_username)[m
+[32m+[m[32m            elif choice == "6":[m
+[32m+[m[32m                cancel_sabtenam_class(member_username)[m
+[32m+[m[32m            elif choice == "7":[m
+[32m+[m[32m                view_my_exercise_plan(member_username)[m
+[32m+[m[32m            elif choice == "8":[m
+[32m+[m[32m                return[m
+[32m+[m[32m            else:[m
+[32m+[m[32m                print("Invalid choice.")[m
+[32m+[m[32m        except BackToMenu :[m
+[32m+[m[32m            print("back to menu")[m
+ [m
+           [m
+ [m
+[1mdiff --git a/services/adminServices.py b/services/adminServices.py[m
+[1mindex 37a0536..cebbb3c 100644[m
+[1m--- a/services/adminServices.py[m
+[1m+++ b/services/adminServices.py[m
+[36m@@ -16,6 +16,7 @@[m [mfrom core.models import Wallet[m
+ from core.exceptions import ClubError[m
+ from services.validation import validate_user_registration[m
+ from core.models import Users, SportClass, Salon[m
+[32m+[m[32mfrom core.back import ask[m
+ [m
+ ALLOWED_ROLES = ["admin"][m
+ [m
+[36m@@ -45,17 +46,17 @@[m [mdef add_user(current_role):[m
+         print("Only the admin is authorized to do this.")[m
+         return None[m
+     while True:[m
+[31m-        user_role = input("Enter user type (coach/member): ").strip().lower()[m
+[32m+[m[32m        user_role = ask("Enter user type (coach/member): ")[m
+         if user_role in ["coach", "member"]:[m
+             break[m
+         else:[m
+             print("Invalid user type. Please enter 'coach' or 'member'.")[m
+ [m
+     # برای نام در سند محدودیت ذکر نشده ولی چک میکنم که خالی نباشه[m
+[31m-    name = input("Enter name: ").strip()[m
+[31m-    username = input("Enter username: ").strip()[m
+[31m-    password = input("Enter password: ").strip()[m
+[31m-    email = input("Enter email: ").strip() [m
+[32m+[m[32m    name = ask("Enter name: ")[m
+[32m+[m[32m    username = ask("Enter username: ")[m
+[32m+[m[32m    password = ask("Enter password: ")[m
+[32m+[m[32m    email = ask("Enter email: ")[m
+     if email=="":[m
+         email = None[m
+     # وارد کردن ایمیل اختیاری است ولی اگر وارد شد باید درست بودنش چک شود[m
+[36m@@ -119,7 +120,7 @@[m [mdef change_activity_user(current_role):[m
+     if current_role.lower() not in ALLOWED_ROLES:[m
+         print("Only the admin is authorized to do this.")[m
+         return [m
+[31m-    username = input("Enter username of the user to activate/deactivate: ").strip()[m
+[32m+[m[32m    username = ask("Enter username of the user to activate/deactivate: ")[m
+     try:[m
+         user = UserRepository.find_by_username(username)[m
+         if user is None:[m
+[36m@@ -127,13 +128,13 @@[m [mdef change_activity_user(current_role):[m
+             return [m
+         else:[m
+             if user.is_active:[m
+[31m-                answer = input("user is active. Deactivate?(Y/N)").strip()[m
+[32m+[m[32m                answer = ask("user is active. Deactivate?(Y/N)")[m
+                 if answer.lower()=="y":[m
+                     UserRepository.deactivate(user.id)[m
+                     print(f"User '{username}' deactivated.")[m
+                     return[m
+             else:[m
+[31m-                answer = input("user is not active. Activate?(Y/N)").strip()[m
+[32m+[m[32m                answer = ask("user is not active. Activate?(Y/N)")[m
+                 if answer.lower()=="y":[m
+                     UserRepository.activate(user.id)[m
+                     print(f"User '{username}' activated.")[m
+[36m@@ -147,18 +148,18 @@[m [mdef edit_user(current_role):[m
+     if current_role.lower() not in ALLOWED_ROLES:[m
+         print("Only the admin is authorized to do this.")[m
+         return [m
+[31m-    username = input("Enter username of the user to edit: ").strip()[m
+[32m+[m[32m    username = ask("Enter username of the user to edit: ")[m
+     try:[m
+         user = UserRepository.find_by_username(username)[m
+         if user is None:[m
+             print(f"no user found with username: {username}")[m
+             return [m
+[31m-        new_name = input(f"New name ({user.name}): ").strip()[m
+[31m-        new_email = input(f"New email ({user.email}): ").strip()[m
+[31m-        new_pass = input(f"New password : ").strip()[m
+[32m+[m[32m        new_name = ask(f"New name ({user.name}): ")[m
+[32m+[m[32m        new_email = ask(f"New email ({user.email}): ")[m
+[32m+[m[32m        new_pass = ask(f"New password : ")[m
+         activity = "active" if user.is_active else "inactive"[m
+         print(f"current activity is: {activity} ")[m
+[31m-        new_activity = input("Change activity? (Y/N)").strip().lower()[m
+[32m+[m[32m        new_activity = ask("Change activity? (Y/N)")[m
+         [m
+         name_=user.name[m
+         if new_name :[m
+[36m@@ -200,7 +201,7 @@[m [mdef add_hall(current_role):[m
+         print("Only the admin is authorized to do this.")[m
+         return [m
+     while True:[m
+[31m-        hall_name = input("Hall name: ").strip()[m
+[32m+[m[32m        hall_name = ask("Hall name: ")[m
+         if hall_name:[m
+             break[m
+         print("Hall name cannot be empty.")[m
+[36m@@ -216,7 +217,7 @@[m [mdef add_hall(current_role):[m
+     # مشخصات سالن جدید را بگیر [m
+     while True:[m
+         try:[m
+[31m-            capacity=int(input("enter capacity : ").strip())[m
+[32m+[m[32m            capacity=int(ask("enter capacity : "))[m
+             if capacity<=0:[m
+                 print("capacity must be a positive number")[m
+                 continue[m
+[36m@@ -224,7 +225,7 @@[m [mdef add_hall(current_role):[m
+                 break [m
+         except ValueError:[m
+             print("Capacity must be a number.")[m
+[31m-    text = input("Equipments (comma separated): ").strip()[m
+[32m+[m[32m    text = ask("Equipments (comma separated): ")[m
+     equipments = [e.strip() for e in text.split(",") if e.strip()] if text else []  [m
+     try:    [m
+         dict_ = {"id": generate_hall_id(),"name": hall_name, "capacity": capacity,"equipments": equipments, "is_active": True}    [m
+[36m@@ -263,7 +264,7 @@[m [mdef change_activity_hall(current_role):[m
+     if current_role.lower() not in ALLOWED_ROLES:[m
+         print("Only the admin is authorized to do this.")[m
+         return [m
+[31m-    hallname = input("Enter name of the hall to activate/deactivate: ").strip()[m
+[32m+[m[32m    hallname = ask("Enter name of the hall to activate/deactivate: ")[m
+     try:[m
+         hall = SalonsRepository.find_hall_by_name(hallname)[m
+         if hall is None:[m
+[36m@@ -271,13 +272,13 @@[m [mdef change_activity_hall(current_role):[m
+             return [m
+         else:[m
+             if hall.is_active:[m
+[31m-                answer = input("hall is active. Deactivate?(Y/N)").strip()[m
+[32m+[m[32m                answer = ask("hall is active. Deactivate?(Y/N)")[m
+                 if answer.lower()=="y":[m
+                     SalonsRepository.deactivate(hall.id)[m
+                     print(f"hall '{hallname}' deactivated.")[m
+                     return[m
+             else:[m
+[31m-                answer = input("hall is not active. Activate?(Y/N)").strip()[m
+[32m+[m[32m                answer = ask("hall is not active. Activate?(Y/N)")[m
+                 if answer.lower()=="y":[m
+                     SalonsRepository.activate(hall.id)[m
+                     print(f"Hall '{hall.name}' activated.")[m
+[36m@@ -326,7 +327,7 @@[m [mdef add_class(current_role):[m
+ [m
+     #پیش از ایجاد کلاس بررسی شود که سالن وجود داشته باشد و فعال باشد[m
+     while 
