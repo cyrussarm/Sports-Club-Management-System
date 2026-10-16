@@ -349,7 +349,7 @@ def view_transactions(member_username):
 def charge_wallet_menu(member_username): 
     while True:        
         try:                                      
-            amount = float(ask("Enter amount to charge: ").strip())
+            amount = float(ask("Enter amount to charge: "))
             if not isinstance(amount, (int, float)) or amount <= 0: 
                 print("Amount must be positive.")           
                 continue
@@ -360,7 +360,7 @@ def charge_wallet_menu(member_username):
     card_number = ask(" Card number: ").strip()
     while True:
         try:
-            exp_month = int(ask(" Expire month: ").strip())
+            exp_month = int(ask(" Expire month: "))
             if not 1 <= exp_month <= 12:
                 print("Month must be between 1 and 12.")
                 continue
@@ -370,13 +370,13 @@ def charge_wallet_menu(member_username):
 
     while True:
         try:
-            exp_year = int(ask("Expire year: ").strip())
+            exp_year = int(ask("Expire year: "))
             break
         except ValueError:
             print("Year must be a number.")
 
-    pin = ask("  PIN (6 digits): ").strip()
-    cvv2 = ask("  CVV2 (3 digits): ").strip()
+    pin = ask("  PIN (6 digits): ")
+    cvv2 = ask("  CVV2 (3 digits): ")
 
     card_details = {
         "card_number": card_number,
